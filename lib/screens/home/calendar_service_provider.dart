@@ -50,7 +50,8 @@ class CalendarServiceProvider extends ChangeNotifier {
     if (sharedPreferences.getString("authUserHeader") != null) {
       try {
         final authenticateClient = GoogleHttpClient(await getAuth());
-        final google_api.CalendarApi calendar = google_api.CalendarApi(authenticateClient);
+        final google_api.CalendarApi calendar =
+            google_api.CalendarApi(authenticateClient);
         final result = await calendar.calendarList.list();
         debugPrint("VAL________${result.items}");
         notifyListeners();
@@ -67,7 +68,9 @@ class CalendarServiceProvider extends ChangeNotifier {
         return "exception";
       } catch (e) {
         debugPrint("ERROR: $e");
-        showToast(message: "Request failed. Please try again.", timeInSecForIosWeb: 2);
+        showToast(
+            message: "Request failed. Please try again.",
+            timeInSecForIosWeb: 2);
         return "exception";
       }
     }
@@ -75,7 +78,8 @@ class CalendarServiceProvider extends ChangeNotifier {
   }
 
   /// Api to fetch the event list using the calendar entry ID
-  Future<dynamic> getEventList(BuildContext context, google_api.CalendarListEntry calendarEntry) async {
+  Future<dynamic> getEventList(
+      BuildContext context, google_api.CalendarListEntry calendarEntry) async {
     if (currentUser == null) {
       debugPrint("User not logged in");
       return "exception";
@@ -89,7 +93,8 @@ class CalendarServiceProvider extends ChangeNotifier {
       try {
         // Get the authentication headers from the shared preferences
         final authenticateClient = GoogleHttpClient(await getAuth());
-        final google_api.CalendarApi calendar = google_api.CalendarApi(authenticateClient);
+        final google_api.CalendarApi calendar =
+            google_api.CalendarApi(authenticateClient);
         final result = await calendar.events.list(calendarEntry.id!);
         // notifyListeners();
         return result;
@@ -106,7 +111,10 @@ class CalendarServiceProvider extends ChangeNotifier {
         return "exception";
       } catch (e) {
         debugPrint("ERROR: $e");
-        showToast(message: "Error encountered while fetching events. Please try again.", timeInSecForIosWeb: 2);
+        showToast(
+            message:
+                "Error encountered while fetching events. Please try again.",
+            timeInSecForIosWeb: 2);
         return "exception";
       }
     }
@@ -114,7 +122,8 @@ class CalendarServiceProvider extends ChangeNotifier {
   }
 
   /// Delete the calendar entry from the App.
-  Future<dynamic> deleteCalendar({required BuildContext context, required String calendarId}) async {
+  Future<dynamic> deleteCalendar(
+      {required BuildContext context, required String calendarId}) async {
     if (currentUser == null) {
       debugPrint("User not logged in");
       return "exception";
@@ -125,7 +134,8 @@ class CalendarServiceProvider extends ChangeNotifier {
     if (sharedPreferences.getString("authUserHeader") != null) {
       try {
         final authenticateClient = GoogleHttpClient(await getAuth());
-        final google_api.CalendarApi calendar = google_api.CalendarApi(authenticateClient);
+        final google_api.CalendarApi calendar =
+            google_api.CalendarApi(authenticateClient);
         try {
           await calendar.calendarList.delete(calendarId);
           return null;

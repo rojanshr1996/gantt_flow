@@ -22,7 +22,8 @@ import 'package:url_launcher/url_launcher.dart';
 class EventDetail extends StatefulWidget {
   final String eventId;
   final String calendarId;
-  const EventDetail({Key? key, required this.eventId, required this.calendarId}) : super(key: key);
+  const EventDetail({Key? key, required this.eventId, required this.calendarId})
+      : super(key: key);
 
   @override
   _EventDetailState createState() => _EventDetailState();
@@ -43,18 +44,23 @@ class _EventDetailState extends State<EventDetail> {
   }
 
   getEvent(BuildContext context) {
-    final eventProvider = Provider.of<EventServiceProvider>(context, listen: false);
-    final authProvider = Provider.of<AuthServiceProvider>(context, listen: false);
+    final eventProvider =
+        Provider.of<EventServiceProvider>(context, listen: false);
+    final authProvider =
+        Provider.of<AuthServiceProvider>(context, listen: false);
     authProvider.refreshToken().then((data) async {
       if (data != "exception") {
         final result = await eventProvider.getEventDetail(
-            calendarId: widget.calendarId, eventId: widget.eventId, context: context);
+            calendarId: widget.calendarId,
+            eventId: widget.eventId,
+            context: context);
         isLoading = false;
         setState(() {});
         if (result != null) {
           debugPrint("THIS IS EVENT: $result");
           eventDetail = result;
-          debugPrint("THIS IS EVENT Attendees: ${eventDetail?.attendees?.length}");
+          debugPrint(
+              "THIS IS EVENT Attendees: ${eventDetail?.attendees?.length}");
         }
         eventProvider.setEventDeleted(false);
       } else {
@@ -75,8 +81,10 @@ class _EventDetailState extends State<EventDetail> {
 
   @override
   Widget build(BuildContext context) {
-    const EdgeInsetsGeometry headerPadding = EdgeInsets.fromLTRB(16, 0, 16, 8); //Padding for header field info
-    const EdgeInsetsGeometry summaryPadding = EdgeInsets.fromLTRB(8, 16, 8, 16); //Padding for event title
+    const EdgeInsetsGeometry headerPadding =
+        EdgeInsets.fromLTRB(16, 0, 16, 8); //Padding for header field info
+    const EdgeInsetsGeometry summaryPadding =
+        EdgeInsets.fromLTRB(8, 16, 8, 16); //Padding for event title
 
     return RemoveFocus(
       child: BackgroundScaffold(
@@ -94,15 +102,21 @@ class _EventDetailState extends State<EventDetail> {
                           EditEvent(
                             calendarId: eventDetail?.organizer?.email ?? "",
                             eventId: eventDetail?.id,
-                            calendarName: eventDetail?.organizer?.displayName ?? eventDetail?.organizer?.email ?? "",
+                            calendarName: eventDetail?.organizer?.displayName ??
+                                eventDetail?.organizer?.email ??
+                                "",
                             eventTitle: eventDetail?.summary ?? "",
                             startTime: eventDetail?.start?.date ??
-                                eventDetail?.start?.dateTime?.add(DateTime.now().timeZoneOffset),
-                            endTime: eventDetail?.end?.date?.subtract(const Duration(days: 1)) ??
-                                eventDetail?.end?.dateTime?.add(DateTime.now().timeZoneOffset),
+                                eventDetail?.start?.dateTime
+                                    ?.add(DateTime.now().timeZoneOffset),
+                            endTime: eventDetail?.end?.date
+                                    ?.subtract(const Duration(days: 1)) ??
+                                eventDetail?.end?.dateTime
+                                    ?.add(DateTime.now().timeZoneOffset),
                             description: eventDetail?.description ?? "",
                             location: eventDetail?.location ?? "",
-                            allDayEvent: eventDetail?.start?.date == null ? false : true,
+                            allDayEvent:
+                                eventDetail?.start?.date == null ? false : true,
                             attendees: eventDetail?.attendees ?? [],
                             attachments: eventDetail?.attachments ?? [],
                           )).then((data) {
@@ -151,25 +165,36 @@ class _EventDetailState extends State<EventDetail> {
                                   : Column(
                                       children: [
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
                                           children: [
                                             Container(
                                               decoration: const BoxDecoration(
                                                 color: AppColor.secondary,
                                                 borderRadius: BorderRadius.only(
-                                                    topRight: Radius.circular(8), bottomLeft: Radius.circular(8)),
+                                                    topRight:
+                                                        Radius.circular(8),
+                                                    bottomLeft:
+                                                        Radius.circular(8)),
                                               ),
                                               child: Padding(
-                                                padding: const EdgeInsets.all(8.0),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
                                                 child: Row(
                                                   children: [
-                                                    const Icon(Icons.event, color: AppColor.primaryLight, size: 18),
+                                                    const Icon(Icons.event,
+                                                        color: AppColor
+                                                            .primaryLight,
+                                                        size: 18),
                                                     const SizedBox(width: 6),
                                                     Text(
-                                                      eventDetail?.organizer?.displayName ??
-                                                          eventDetail?.organizer?.email ??
+                                                      eventDetail?.organizer
+                                                              ?.displayName ??
+                                                          eventDetail?.organizer
+                                                              ?.email ??
                                                           " ---- ",
-                                                      style: CustomTextStyle.smallTextLightBold,
+                                                      style: CustomTextStyle
+                                                          .smallTextLightBold,
                                                     ),
                                                   ],
                                                 ),
@@ -178,12 +203,17 @@ class _EventDetailState extends State<EventDetail> {
                                           ],
                                         ),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
                                           children: [
                                             Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Text(eventDetail?.creator?.email ?? "",
-                                                  style: CustomTextStyle.smallTextBold),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                  eventDetail?.creator?.email ??
+                                                      "",
+                                                  style: CustomTextStyle
+                                                      .smallTextBold),
                                             )
                                           ],
                                         ),
@@ -191,158 +221,224 @@ class _EventDetailState extends State<EventDetail> {
                                           child: ListView(
                                             children: [
                                               Padding(
-                                                padding: const EdgeInsets.all(8.0),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
                                                 child: Padding(
                                                   padding: summaryPadding,
-                                                  child: Text(eventDetail?.summary ?? " -- No Title --",
-                                                      style: CustomTextStyle.largeHeaderText),
+                                                  child: Text(
+                                                      eventDetail?.summary ??
+                                                          " -- No Title --",
+                                                      style: CustomTextStyle
+                                                          .largeHeaderText),
                                                 ),
                                               ),
                                               const SizedBox(height: 8),
                                               timeTile(
                                                   title: "START TIME",
-                                                  body: eventDetail?.start?.date ??
-                                                      eventDetail?.start?.dateTime?.add(DateTime.now().timeZoneOffset),
-                                                  allDayEvent: eventDetail?.start?.date == null ? false : true),
+                                                  body: eventDetail
+                                                          ?.start?.date ??
+                                                      eventDetail
+                                                          ?.start?.dateTime
+                                                          ?.add(DateTime.now()
+                                                              .timeZoneOffset),
+                                                  allDayEvent: eventDetail
+                                                              ?.start?.date ==
+                                                          null
+                                                      ? false
+                                                      : true),
                                               timeTile(
                                                   title: "END TIME",
-                                                  body: eventDetail?.end?.date?.subtract(const Duration(days: 1)) ??
-                                                      eventDetail?.end?.dateTime?.add(DateTime.now().timeZoneOffset),
-                                                  allDayEvent: eventDetail?.start?.date == null ? false : true),
+                                                  body: eventDetail?.end?.date
+                                                          ?.subtract(
+                                                              const Duration(
+                                                                  days: 1)) ??
+                                                      eventDetail?.end?.dateTime
+                                                          ?.add(DateTime.now()
+                                                              .timeZoneOffset),
+                                                  allDayEvent: eventDetail
+                                                              ?.start?.date ==
+                                                          null
+                                                      ? false
+                                                      : true),
                                               const SizedBox(height: 8),
                                               Padding(
-                                                padding: const EdgeInsets.all(16),
+                                                padding:
+                                                    const EdgeInsets.all(16),
                                                 child: InfoFieldWidget(
                                                     fieldName: "DESCRIPTION",
-                                                    fieldInfo: eventDetail?.description ?? " ---- ",
-                                                    fieldNameStyle: CustomTextStyle.hintbodyText),
+                                                    fieldInfo: eventDetail
+                                                            ?.description ??
+                                                        " ---- ",
+                                                    fieldNameStyle:
+                                                        CustomTextStyle
+                                                            .hintbodyText),
                                               ),
                                               Padding(
                                                 padding: headerPadding,
                                                 child: InfoFieldWidget(
                                                     fieldName: "LOCATION",
-                                                    fieldInfo: eventDetail?.location ?? " ---- ",
-                                                    fieldNameStyle: CustomTextStyle.hintbodyText),
+                                                    fieldInfo:
+                                                        eventDetail?.location ??
+                                                            " ---- ",
+                                                    fieldNameStyle:
+                                                        CustomTextStyle
+                                                            .hintbodyText),
                                               ),
                                               const Padding(
                                                 padding: headerPadding,
-                                                child: Text("ATTENDEES", style: CustomTextStyle.hintbodyText),
+                                                child: Text("ATTENDEES",
+                                                    style: CustomTextStyle
+                                                        .hintbodyText),
                                               ),
                                               Padding(
                                                 padding: headerPadding,
-                                                child: eventDetail?.attendees == null
-                                                    ? const SizedBox(
-                                                        child: Padding(
-                                                          padding: headerPadding,
-                                                          child: Text(
-                                                            " ---- ",
-                                                            style: CustomTextStyle.bodyTextBold,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    : Container(
-                                                        decoration: BoxDecoration(
-                                                            color: AppColor.light,
-                                                            borderRadius: BorderRadius.circular(8)),
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                                                          child: SizedBox(
-                                                            child: Column(
-                                                              children: eventDetail!.attendees!.map<Widget>((item) {
-                                                                return Padding(
-                                                                  padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-                                                                  child: Container(
-                                                                    decoration: BoxDecoration(
-                                                                        color: item.responseStatus! == "accepted"
-                                                                            ? AppColor.success
-                                                                            : item.responseStatus! == "declined"
-                                                                                ? AppColor.muted
-                                                                                : AppColor.primary,
-                                                                        border: Border.all(
+                                                child:
+                                                    eventDetail?.attendees ==
+                                                            null
+                                                        ? const SizedBox(
+                                                            child: Padding(
+                                                              padding:
+                                                                  headerPadding,
+                                                              child: Text(
+                                                                " ---- ",
+                                                                style: CustomTextStyle
+                                                                    .bodyTextBold,
+                                                              ),
+                                                            ),
+                                                          )
+                                                        : Container(
+                                                            decoration: BoxDecoration(
+                                                                color: AppColor
+                                                                    .light,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8)),
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .fromLTRB(
+                                                                      8,
+                                                                      0,
+                                                                      8,
+                                                                      8),
+                                                              child: SizedBox(
+                                                                child: Column(
+                                                                  children: eventDetail!
+                                                                      .attendees!
+                                                                      .map<Widget>(
+                                                                          (item) {
+                                                                    return Padding(
+                                                                      padding: const EdgeInsets
+                                                                          .fromLTRB(
+                                                                          0,
+                                                                          8,
+                                                                          0,
+                                                                          0),
+                                                                      child:
+                                                                          Container(
+                                                                        decoration: BoxDecoration(
                                                                             color: item.responseStatus! == "accepted"
                                                                                 ? AppColor.success
                                                                                 : item.responseStatus! == "declined"
                                                                                     ? AppColor.muted
-                                                                                    : AppColor.primary),
-                                                                        borderRadius: BorderRadius.circular(5)),
-                                                                    child: Row(
-                                                                      children: [
-                                                                        Expanded(
-                                                                          flex: 5,
-                                                                          child: Container(
-                                                                            decoration: BoxDecoration(
-                                                                                color: AppColor.white,
-                                                                                borderRadius: BorderRadius.circular(5)),
-                                                                            child: Padding(
-                                                                              padding: const EdgeInsets.all(8),
-                                                                              child: Text(
-                                                                                item.email ?? " --",
-                                                                                style:
-                                                                                    CustomTextStyle.bodyTextAccentBold,
+                                                                                    : AppColor.primary,
+                                                                            border: Border.all(
+                                                                                color: item.responseStatus! == "accepted"
+                                                                                    ? AppColor.success
+                                                                                    : item.responseStatus! == "declined"
+                                                                                        ? AppColor.muted
+                                                                                        : AppColor.primary),
+                                                                            borderRadius: BorderRadius.circular(5)),
+                                                                        child:
+                                                                            Row(
+                                                                          children: [
+                                                                            Expanded(
+                                                                              flex: 5,
+                                                                              child: Container(
+                                                                                decoration: BoxDecoration(color: AppColor.white, borderRadius: BorderRadius.circular(5)),
+                                                                                child: Padding(
+                                                                                  padding: const EdgeInsets.all(8),
+                                                                                  child: Text(
+                                                                                    item.email ?? " --",
+                                                                                    style: CustomTextStyle.bodyTextAccentBold,
+                                                                                  ),
+                                                                                ),
                                                                               ),
                                                                             ),
-                                                                          ),
+                                                                            Expanded(
+                                                                              flex: 2,
+                                                                              child: Padding(
+                                                                                padding: const EdgeInsets.only(left: 8, right: 8),
+                                                                                child: Text(
+                                                                                  item.responseStatus == "needsAction" ? "Action needed" : item.responseStatus!.substring(0, 1).toUpperCase() + item.responseStatus!.substring(1),
+                                                                                  style: item.responseStatus! == "accepted"
+                                                                                      ? CustomTextStyle.smallTextLightBold
+                                                                                      : item.responseStatus! == "declined"
+                                                                                          ? CustomTextStyle.smallTextBold
+                                                                                          : CustomTextStyle.smallTextLightBold,
+                                                                                  textAlign: TextAlign.center,
+                                                                                ),
+                                                                              ),
+                                                                            )
+                                                                          ],
                                                                         ),
-                                                                        Expanded(
-                                                                          flex: 2,
-                                                                          child: Padding(
-                                                                            padding: const EdgeInsets.only(
-                                                                                left: 8, right: 8),
-                                                                            child: Text(
-                                                                              item.responseStatus == "needsAction"
-                                                                                  ? "Action needed"
-                                                                                  : item.responseStatus!
-                                                                                          .substring(0, 1)
-                                                                                          .toUpperCase() +
-                                                                                      item.responseStatus!.substring(1),
-                                                                              style: item.responseStatus! == "accepted"
-                                                                                  ? CustomTextStyle.smallTextLightBold
-                                                                                  : item.responseStatus! == "declined"
-                                                                                      ? CustomTextStyle.smallTextBold
-                                                                                      : CustomTextStyle
-                                                                                          .smallTextLightBold,
-                                                                              textAlign: TextAlign.center,
-                                                                            ),
-                                                                          ),
-                                                                        )
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                );
-                                                              }).toList(),
+                                                                      ),
+                                                                    );
+                                                                  }).toList(),
+                                                                ),
+                                                              ),
                                                             ),
                                                           ),
-                                                        ),
-                                                      ),
                                               ),
                                               const SizedBox(height: 8),
                                               const Padding(
                                                 padding: headerPadding,
-                                                child: Text("ATTACHMENTS", style: CustomTextStyle.hintbodyText),
+                                                child: Text("ATTACHMENTS",
+                                                    style: CustomTextStyle
+                                                        .hintbodyText),
                                               ),
                                               Padding(
                                                 padding: headerPadding,
-                                                child: eventDetail?.attachments == null
+                                                child: eventDetail
+                                                            ?.attachments ==
+                                                        null
                                                     ? const SizedBox(
                                                         child: Padding(
-                                                          padding: headerPadding,
+                                                          padding:
+                                                              headerPadding,
                                                           child: Text(
                                                             " ---- ",
-                                                            style: CustomTextStyle.bodyTextBold,
+                                                            style: CustomTextStyle
+                                                                .bodyTextBold,
                                                           ),
                                                         ),
                                                       )
                                                     : Container(
                                                         decoration: BoxDecoration(
-                                                            color: AppColor.light,
-                                                            borderRadius: BorderRadius.circular(8)),
+                                                            color:
+                                                                AppColor.light,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8)),
                                                         child: Padding(
-                                                          padding: const EdgeInsets.all(8.0),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
                                                           child: Wrap(
-                                                            direction: Axis.horizontal,
-                                                            children: eventDetail!.attachments!.map<Widget>((item) {
+                                                            direction:
+                                                                Axis.horizontal,
+                                                            children: eventDetail!
+                                                                .attachments!
+                                                                .map<Widget>(
+                                                                    (item) {
                                                               return Padding(
-                                                                padding: const EdgeInsets.only(right: 8.0),
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        right:
+                                                                            8.0),
                                                                 child: attachmentTag(
                                                                     title: "${item.title}",
                                                                     iconData: item.mimeType == "application/pdf"
@@ -377,15 +473,18 @@ class _EventDetailState extends State<EventDetail> {
     );
   }
 
-  void _launchURL(String url) async => await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+  void _launchURL(String url) async =>
+      await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
 
-  Widget attachmentTag({required String title, Function()? onPressed, IconData? iconData}) {
+  Widget attachmentTag(
+      {required String title, Function()? onPressed, IconData? iconData}) {
     return InputChip(
       label: Text(title),
       labelStyle: CustomTextStyle.smallTextLight,
       backgroundColor: AppColor.secondary,
       onPressed: onPressed ?? () {},
-      avatar: Icon(iconData ?? Icons.file_copy, color: AppColor.primaryLight, size: 20),
+      avatar: Icon(iconData ?? Icons.file_copy,
+          color: AppColor.primaryLight, size: 20),
     );
   }
 
@@ -399,7 +498,8 @@ class _EventDetailState extends State<EventDetail> {
       padding: const EdgeInsets.only(left: 12, right: 12, bottom: 8),
       child: Container(
         width: Utilities.screenWidth(context),
-        decoration: BoxDecoration(color: AppColor.light, borderRadius: BorderRadius.circular(8)),
+        decoration: BoxDecoration(
+            color: AppColor.light, borderRadius: BorderRadius.circular(8)),
         padding: const EdgeInsets.all(12),
         child: Row(
           children: [
@@ -412,7 +512,9 @@ class _EventDetailState extends State<EventDetail> {
               child: Text(
                   allDayEvent
                       ? DateFormat.yMMMEd().format(body!)
-                      : DateFormat.yMMMEd().format(body!) + ", " + DateFormat.jm().format(body),
+                      : DateFormat.yMMMEd().format(body!) +
+                          ", " +
+                          DateFormat.jm().format(body),
                   style: bodyStyle,
                   softWrap: true,
                   textAlign: TextAlign.end),
@@ -424,7 +526,8 @@ class _EventDetailState extends State<EventDetail> {
   }
 
   deleteEvent(BuildContext context) {
-    final eventProvider = Provider.of<EventServiceProvider>(context, listen: false);
+    final eventProvider =
+        Provider.of<EventServiceProvider>(context, listen: false);
 
     return showDialog(
       context: context,
@@ -432,8 +535,10 @@ class _EventDetailState extends State<EventDetail> {
         return CustomAlertDialog(
           leftButtonText: "YES",
           rightButtonText: "NO",
-          title: const Text("Do you want to delete this event?", style: CustomTextStyle.headerTextLight),
-          body: const Text("The event will also be removed from the Google Calendar.",
+          title: const Text("Do you want to delete this event?",
+              style: CustomTextStyle.headerTextLight),
+          body: const Text(
+              "The event will also be removed from the Google Calendar.",
               style: CustomTextStyle.bodyTextLight),
           rightButtonFunction: () {
             Utilities.closeActivity(ctx);
@@ -443,11 +548,15 @@ class _EventDetailState extends State<EventDetail> {
             setState(() {
               loader = true;
             });
-            final authProvider = Provider.of<AuthServiceProvider>(context, listen: false);
+            final authProvider =
+                Provider.of<AuthServiceProvider>(context, listen: false);
             authProvider.refreshToken().then((data) async {
               if (data != "exception") {
                 eventProvider
-                    .deleteEvent(context: context, calendarId: widget.calendarId, eventId: widget.eventId)
+                    .deleteEvent(
+                        context: context,
+                        calendarId: widget.calendarId,
+                        eventId: widget.eventId)
                     .then((data) {
                   debugPrint("$data");
                   setState(() {

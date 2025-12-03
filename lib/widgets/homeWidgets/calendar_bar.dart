@@ -70,20 +70,24 @@ class _CalendarBarState extends State<CalendarBar> {
               child: DropdownButton(
                 value: dropdownValue,
                 dropdownColor: AppColor.primary,
-                icon: const Icon(Icons.arrow_drop_down_outlined, size: 32, color: AppColor.primary),
+                icon: const Icon(Icons.arrow_drop_down_outlined,
+                    size: 32, color: AppColor.primary),
                 onChanged: (String? newValue) {
                   setState(() {
                     dropdownValue = newValue;
                   });
                   widget.onChangeLayout(newValue);
                 },
-                style: CustomTextStyle.bodyTextLightBold.copyWith(fontFamily: "nunitoSans"),
+                style: CustomTextStyle.bodyTextLightBold
+                    .copyWith(fontFamily: "nunitoSans"),
                 selectedItemBuilder: (BuildContext context) {
                   return optionValue.map((String value) {
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(value, style: CustomTextStyle.bodyTextBoldSecondary.copyWith(fontFamily: "nunitoSans")),
+                        Text(value,
+                            style: CustomTextStyle.bodyTextBoldSecondary
+                                .copyWith(fontFamily: "nunitoSans")),
                       ],
                     );
                   }).toList();
@@ -92,7 +96,8 @@ class _CalendarBarState extends State<CalendarBar> {
                 underline: const SizedBox(),
                 items: optionValue
                     .map<DropdownMenuItem<String>>(
-                      (item) => DropdownMenuItem(value: item, child: Text(item)),
+                      (item) =>
+                          DropdownMenuItem(value: item, child: Text(item)),
                     )
                     .toList(),
               ),

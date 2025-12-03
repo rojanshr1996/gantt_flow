@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:gantt_mobile/base/utilities.dart';
+import 'package:gantt_mobile/providers/app_update_provider.dart';
+import 'package:gantt_mobile/screens/app_update_screen.dart';
 import 'package:gantt_mobile/screens/auth/index_screen.dart';
 import 'package:gantt_mobile/styles/app_color.dart';
 import 'package:gantt_mobile/widgets/components/background_scaffold.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -28,7 +31,15 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void navigationPage() async {
-    Utilities.fadeReplaceActivity(context, const IndexScreen());
+    final appUpdateProvider =
+        Provider.of<AppUpdateProvider>(context, listen: false);
+    await appUpdateProvider.checkForUpdate();
+
+    if (appUpdateProvider.isUpdateRequired) {
+      Utilities.fadeReplaceActivity(context, const AppUpdateScreen());
+    } else {
+      Utilities.fadeReplaceActivity(context, const IndexScreen());
+    }
   }
 
   @override

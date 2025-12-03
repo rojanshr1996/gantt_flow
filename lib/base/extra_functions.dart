@@ -12,12 +12,16 @@ import 'package:gantt_mobile/widgets/components/custom_alert_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-String? validateEmail({required BuildContext context, required String value, String fieldName = "Email"}) {
+String? validateEmail(
+    {required BuildContext context,
+    required String value,
+    String fieldName = "Email"}) {
   value = value.trim();
   if (value.isEmpty) {
     return "$fieldName cannot be empty";
   }
-  String regExpression = r"^(?=^.{6,255}$)([0-9a-zA-Z]+[-._+&amp;])*[0-9a-zA-Z]+@([-0-9a-zA-Z]+[.])+[a-zA-Z]{2,85}$";
+  String regExpression =
+      r"^(?=^.{6,255}$)([0-9a-zA-Z]+[-._+&amp;])*[0-9a-zA-Z]+@([-0-9a-zA-Z]+[.])+[a-zA-Z]{2,85}$";
   RegExp regExp = RegExp(regExpression);
   if (!regExp.hasMatch(value)) {
     return "Enter a valid email";
@@ -25,7 +29,8 @@ String? validateEmail({required BuildContext context, required String value, Str
   return null;
 }
 
-String? validatePassword({required BuildContext context, required String value}) {
+String? validatePassword(
+    {required BuildContext context, required String value}) {
   if (value.isEmpty) {
     return "Password cannot be empty";
   } else if (!(value.length >= 8) && value.isNotEmpty) {
@@ -43,7 +48,10 @@ String? validatePhone({required BuildContext context, required String value}) {
   return null;
 }
 
-String? validateEmptyField({required BuildContext context, required String value, required String fieldName}) {
+String? validateEmptyField(
+    {required BuildContext context,
+    required String value,
+    required String fieldName}) {
   if (value.isEmpty) {
     return "$fieldName cannot be empty";
   }
@@ -114,18 +122,23 @@ tokenExpire(BuildContext context) {
       barrierDismissible: false,
       builder: (BuildContext ctx) {
         return CustomAlertDialog(
-          title: const Text("Invalid authentication credentials!", style: CustomTextStyle.headerTextLight),
-          body: const Text("Request had invalid authentication credentials. Please sign in and try again.",
+          title: const Text("Invalid authentication credentials!",
+              style: CustomTextStyle.headerTextLight),
+          body: const Text(
+              "Request had invalid authentication credentials. Please sign in and try again.",
               style: CustomTextStyle.bodyTextLight),
           leftButtonText: "OK",
           leftButtonFunction: () {
-            Utilities.closeActivity(context);
-            final authProvider = Provider.of<AuthServiceProvider>(context, listen: false);
+            Navigator.of(ctx).pop(); // Use dialog context
+            final authProvider =
+                Provider.of<AuthServiceProvider>(context, listen: false);
             authProvider.logout().then((value) {
               if (value != "exception") {
                 clearUser();
                 showToast(message: "Sign-out successful");
-                Utilities.removeStackActivity(context, const IndexScreen());
+                if (Navigator.canPop(context)) {
+                  Utilities.removeStackActivity(context, const IndexScreen());
+                }
               }
             });
           },
@@ -166,8 +179,10 @@ clearCalendarEvent() async {
 getAuth() async {
   SharedPreferences _sharedPreference = await SharedPreferences.getInstance();
   return {
-    "Authorization": "${json.decode(_sharedPreference.getString("authUserHeader")!)["Authorization"]}",
-    "X-Goog-AuthUser": "${json.decode(_sharedPreference.getString("authUserHeader")!)["X-Goog-AuthUser"]}",
+    "Authorization":
+        "${json.decode(_sharedPreference.getString("authUserHeader")!)["Authorization"]}",
+    "X-Goog-AuthUser":
+        "${json.decode(_sharedPreference.getString("authUserHeader")!)["X-Goog-AuthUser"]}",
   };
 }
 
@@ -176,7 +191,10 @@ saveCalendarInPref(List<String> calendarList) async {
   _sharedPreferences.setStringList("calendarList", calendarList);
 }
 
-List<TextSpan> highlightOccurrences({required String source, required String query, Color textColor = Colors.black}) {
+List<TextSpan> highlightOccurrences(
+    {required String source,
+    required String query,
+    Color textColor = Colors.black}) {
   if (query.isEmpty || !source.toLowerCase().contains(query.toLowerCase())) {
     return [TextSpan(text: source)];
   }

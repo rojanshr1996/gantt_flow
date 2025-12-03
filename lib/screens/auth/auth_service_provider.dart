@@ -93,13 +93,14 @@ class AuthServiceProvider extends ChangeNotifier {
 
       if (googleAuth.accessToken == null || googleAuth.idToken == null) {
         debugPrint("Failed to get authentication tokens");
-        showToast(message: "Failed to get authentication tokens. Please try again.");
+        showToast(
+            message: "Failed to get authentication tokens. Please try again.");
         return "exception";
       }
 
       debugPrint("Creating Firebase credential");
-      final credential =
-          GoogleAuthProvider.credential(accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
+      final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
       final data = await FirebaseAuth.instance.signInWithCredential(credential);
       debugPrint("Successfully signed in with Firebase: ${data.user?.email}");
       notifyListeners();
@@ -125,7 +126,8 @@ class AuthServiceProvider extends ChangeNotifier {
   /// Silently login the user in order to refresh and generate new accesstoken for continous app usage
   Future refreshToken() async {
     try {
-      final googleUser = await googleSignIn.signInSilently(reAuthenticate: true);
+      final googleUser =
+          await googleSignIn.signInSilently(reAuthenticate: true);
       debugPrint("This is the google user: $googleUser");
       if (googleUser == null) {
         debugPrint("Silent sign in failed - user needs to log in again");
@@ -145,8 +147,8 @@ class AuthServiceProvider extends ChangeNotifier {
         return "exception";
       }
 
-      final credential =
-          GoogleAuthProvider.credential(accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
+      final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
       final data = await FirebaseAuth.instance.signInWithCredential(credential);
       return data;
     } on PlatformException catch (e) {
@@ -167,12 +169,14 @@ class AuthServiceProvider extends ChangeNotifier {
       await googleSignIn.signOut();
       await FirebaseAuth.instance.signOut();
 
-      // Clear all stored data
-      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      // Clear auth data but preserve calendar selections
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
       await sharedPreferences.remove("authUser");
       await sharedPreferences.remove("authUserHeader");
-      await sharedPreferences.remove("calendarList");
-      await sharedPreferences.remove("calendarEventList");
+      // Keep calendarList and calendarEventList so user doesn't have to re-add calendars
+      // await sharedPreferences.remove("calendarList");
+      // await sharedPreferences.remove("calendarEventList");
 
       _user = null;
       notifyListeners();

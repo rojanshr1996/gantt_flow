@@ -24,7 +24,10 @@ class Utilities {
   }
 
   static FadeInImage fadeInImage(
-      {double? height, double? width, required String image, required String placeholderPath}) {
+      {double? height,
+      double? width,
+      required String image,
+      required String placeholderPath}) {
     return FadeInImage.assetNetwork(
       width: width,
       height: height,
@@ -61,7 +64,8 @@ class Utilities {
     (await SharedPreferences.getInstance()).setString(key, value);
   }
 
-  static Future<bool> getBoolPreferencesWithFallback(String key, bool fallback) async {
+  static Future<bool> getBoolPreferencesWithFallback(
+      String key, bool fallback) async {
     return ((await SharedPreferences.getInstance()).getBool(key)) ?? fallback;
   }
 
@@ -139,7 +143,8 @@ class Utilities {
   }
 
   static void removeStackActivity(context, object) {
-    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => object), (r) => false);
+    Navigator.pushAndRemoveUntil(
+        context, MaterialPageRoute(builder: (context) => object), (r) => false);
   }
 
   static void closeActivity(context) {
@@ -164,7 +169,8 @@ class Utilities {
         child: isLoading
             ? LinearProgressIndicator(
                 backgroundColor: Colors.transparent,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white.withOpacity(0.5)),
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    Colors.white.withOpacity(0.5)),
               )
             : Container());
   }

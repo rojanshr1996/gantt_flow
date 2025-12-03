@@ -50,38 +50,50 @@ class PdfGanttChart extends pw.StatelessWidget {
     }
   }
 
-  int calculateRemainingWidth(DateTime projectStartedAt, DateTime projectEndedAt) {
-    int projectLength = calculateNumberOfMonthsBetween(projectStartedAt, projectEndedAt);
-    if (projectStartedAt.compareTo(fromDate!) >= 0 && projectStartedAt.compareTo(toDate!) <= 0) {
+  int calculateRemainingWidth(
+      DateTime projectStartedAt, DateTime projectEndedAt) {
+    int projectLength =
+        calculateNumberOfMonthsBetween(projectStartedAt, projectEndedAt);
+    if (projectStartedAt.compareTo(fromDate!) >= 0 &&
+        projectStartedAt.compareTo(toDate!) <= 0) {
       if (projectLength <= viewRange) {
         return projectLength;
       } else {
-        return viewRange - calculateNumberOfMonthsBetween(fromDate!, projectStartedAt);
+        return viewRange -
+            calculateNumberOfMonthsBetween(fromDate!, projectStartedAt);
       }
-    } else if (projectStartedAt.isBefore(fromDate!) && projectEndedAt.isBefore(fromDate!)) {
+    } else if (projectStartedAt.isBefore(fromDate!) &&
+        projectEndedAt.isBefore(fromDate!)) {
       return 0;
-    } else if (projectStartedAt.isBefore(fromDate!) && projectEndedAt.isBefore(toDate!)) {
-      return projectLength - calculateNumberOfMonthsBetween(projectStartedAt, fromDate!);
-    } else if (projectStartedAt.isBefore(fromDate!) && projectEndedAt.isAfter(toDate!)) {
+    } else if (projectStartedAt.isBefore(fromDate!) &&
+        projectEndedAt.isBefore(toDate!)) {
+      return projectLength -
+          calculateNumberOfMonthsBetween(projectStartedAt, fromDate!);
+    } else if (projectStartedAt.isBefore(fromDate!) &&
+        projectEndedAt.isAfter(toDate!)) {
       return viewRange;
     }
     return 0;
   }
 
-  List<pw.Widget> buildChartBars(
-      List<google_api.Event> eventList, double chartViewWidth, google_api.CalendarListEntry calendarEntry) {
+  List<pw.Widget> buildChartBars(List<google_api.Event> eventList,
+      double chartViewWidth, google_api.CalendarListEntry calendarEntry) {
     final List<pw.Widget> chartBars = [];
 
     for (int i = 0; i < eventList.length; i++) {
-      var remainingWidth = calculateRemainingWidth(eventList[i].start!.dateTime ?? eventList[i].start!.date!,
-          eventList[i].end?.dateTime ?? eventList[i].end!.date!.subtract(const Duration(days: 1)));
+      var remainingWidth = calculateRemainingWidth(
+          eventList[i].start!.dateTime ?? eventList[i].start!.date!,
+          eventList[i].end?.dateTime ??
+              eventList[i].end!.date!.subtract(const Duration(days: 1)));
       if (remainingWidth > 0) {
         chartBars.add(
           pw.Container(
             height: 20.0,
             width: remainingWidth * chartViewWidth / viewRangeToFitScreen,
             margin: pw.EdgeInsets.only(
-                left: calculateDistanceToLeftBorder(eventList[i].start?.dateTime ?? eventList[i].start!.date!) *
+                left: calculateDistanceToLeftBorder(
+                        eventList[i].start?.dateTime ??
+                            eventList[i].start!.date!) *
                     chartViewWidth /
                     viewRangeToFitScreen),
             alignment: pw.Alignment.center,
@@ -131,7 +143,10 @@ class PdfGanttChart extends pw.StatelessWidget {
           padding: const pw.EdgeInsets.fromLTRB(2, 8, 2, 8),
           child: pw.Text('CALENDAR',
               textAlign: pw.TextAlign.center,
-              style: pw.TextStyle(fontSize: 6, color: PdfColor.fromHex("#2C363F"), fontWeight: pw.FontWeight.bold)),
+              style: pw.TextStyle(
+                  fontSize: 6,
+                  color: PdfColor.fromHex("#2C363F"),
+                  fontWeight: pw.FontWeight.bold)),
         ),
       ),
     );
@@ -149,9 +164,12 @@ class PdfGanttChart extends pw.StatelessWidget {
           child: pw.Padding(
             padding: const pw.EdgeInsets.fromLTRB(2, 8, 2, 8),
             child: pw.Text(
-              calendarMode == "monthly" ? DateFormat.d().format(tempDate) : DateFormat.yM().format(tempDate),
+              calendarMode == "monthly"
+                  ? DateFormat.d().format(tempDate)
+                  : DateFormat.yM().format(tempDate),
               textAlign: pw.TextAlign.center,
-              style: pw.TextStyle(fontSize: 6, color: PdfColor.fromHex("#E75A7C")),
+              style:
+                  pw.TextStyle(fontSize: 6, color: PdfColor.fromHex("#E75A7C")),
             ),
           ),
         ),
@@ -179,7 +197,9 @@ class PdfGanttChart extends pw.StatelessWidget {
                 right: pw.BorderSide(color: PdfColors.grey, width: 0.5),
                 bottom: pw.BorderSide(color: PdfColors.grey, width: 0.5)),
           ),
-          width: i == 0 ? (chartViewWidth / viewRangeToFitScreen) + 24 : chartViewWidth / viewRangeToFitScreen,
+          width: i == 0
+              ? (chartViewWidth / viewRangeToFitScreen) + 24
+              : chartViewWidth / viewRangeToFitScreen,
         ),
       );
     }
@@ -189,12 +209,14 @@ class PdfGanttChart extends pw.StatelessWidget {
     );
   }
 
-  pw.Widget buildChartForEachUser(
-      List<google_api.Event> eventList, double chartViewWidth, google_api.CalendarListEntry calendarEntry) {
+  pw.Widget buildChartForEachUser(List<google_api.Event> eventList,
+      double chartViewWidth, google_api.CalendarListEntry calendarEntry) {
     var chartBars = buildChartBars(eventList, chartViewWidth, calendarEntry);
 
     return pw.SizedBox(
-      height: chartBars.length < 5 ? 5 * 19.0 + 35.0 + 11.0 : chartBars.length * 19.0 + 35.0 + 11.0,
+      height: chartBars.length < 5
+          ? 5 * 19.0 + 35.0 + 11.0
+          : chartBars.length * 19.0 + 35.0 + 11.0,
       child: pw.Row(
         children: <pw.Widget>[
           pw.Stack(
@@ -214,9 +236,12 @@ class PdfGanttChart extends pw.StatelessWidget {
                             decoration: pw.BoxDecoration(
                               color: PdfColor.fromHex("#F2F5EA"),
                               border: const pw.Border(
-                                bottom: pw.BorderSide(color: PdfColors.grey, width: 0.5),
-                                left: pw.BorderSide(color: PdfColors.grey, width: 0.5),
-                                right: pw.BorderSide(color: PdfColors.grey, width: 0.5),
+                                bottom: pw.BorderSide(
+                                    color: PdfColors.grey, width: 0.5),
+                                left: pw.BorderSide(
+                                    color: PdfColors.grey, width: 0.5),
+                                right: pw.BorderSide(
+                                    color: PdfColors.grey, width: 0.5),
                               ),
                             ),
                             child: pw.Center(
@@ -224,8 +249,10 @@ class PdfGanttChart extends pw.StatelessWidget {
                                 padding: const pw.EdgeInsets.all(4.0),
                                 child: pw.Text(
                                   calendarEntry.summary!,
-                                  style:
-                                      pw.TextStyle(fontSize: 6, fontWeight: pw.FontWeight.bold, color: PdfColors.black),
+                                  style: pw.TextStyle(
+                                      fontSize: 6,
+                                      fontWeight: pw.FontWeight.bold,
+                                      color: PdfColors.black),
                                   textAlign: pw.TextAlign.center,
                                   maxLines: 3,
                                 ),
@@ -254,8 +281,11 @@ class PdfGanttChart extends pw.StatelessWidget {
 
     for (var calEntry in calendarEntry) {
       List<google_api.Event> ganttEvents = [];
-      ganttEvents = eventList!.where((project) => project.organizer?.email == calEntry.id).toList();
-      chartContent.add(buildChartForEachUser(ganttEvents, chartViewWidth, calEntry));
+      ganttEvents = eventList!
+          .where((project) => project.organizer?.email == calEntry.id)
+          .toList();
+      chartContent
+          .add(buildChartForEachUser(ganttEvents, chartViewWidth, calEntry));
     }
 
     return chartContent;
@@ -301,7 +331,8 @@ Future<Uint8List> generateCalendar(
           orientation: pw.PageOrientation.portrait,
           margin: const pw.EdgeInsets.all(24),
           theme: pw.ThemeData.withFont(
-              base: await PdfGoogleFonts.openSansRegular(), bold: await PdfGoogleFonts.openSansBold()),
+              base: await PdfGoogleFonts.openSansRegular(),
+              bold: await PdfGoogleFonts.openSansBold()),
         ),
         build: (context) => ganttChart.buildChartContent(chartViewWidth)),
   );

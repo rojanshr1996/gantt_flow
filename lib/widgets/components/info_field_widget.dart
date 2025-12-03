@@ -27,7 +27,8 @@ class InfoFieldWidget extends StatelessWidget {
         const SizedBox(height: 2),
         Container(
           width: Utilities.screenWidth(context),
-          decoration: BoxDecoration(color: AppColor.light, borderRadius: BorderRadius.circular(8)),
+          decoration: BoxDecoration(
+              color: AppColor.light, borderRadius: BorderRadius.circular(8)),
           padding: const EdgeInsets.all(16),
           child: Text(
             fieldInfo,

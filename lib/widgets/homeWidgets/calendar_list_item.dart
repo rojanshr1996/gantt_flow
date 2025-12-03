@@ -11,7 +11,13 @@ class CalendarListItem extends StatelessWidget {
   final IconData? leadingIcon;
 
   const CalendarListItem(
-      {Key? key, this.name = "", this.onTap, this.onTrailingTap, this.trailing, this.itemColor, this.leadingIcon})
+      {Key? key,
+      this.name = "",
+      this.onTap,
+      this.onTrailingTap,
+      this.trailing,
+      this.itemColor,
+      this.leadingIcon})
       : super(key: key);
 
   @override

@@ -5,19 +5,25 @@ import 'package:gantt_mobile/screens/home/home_screen.dart';
 
 /// Checks the changes in firebase auth instance in order to navigate user to either home screen or login screen
 class IndexScreen extends StatefulWidget {
-  const IndexScreen({Key? key}) : super(key: key);
+  const IndexScreen({super.key});
 
   @override
   _IndexScreenState createState() => _IndexScreenState();
 }
 
 class _IndexScreenState extends State<IndexScreen> {
-  bool _isCheckingSession = true;
+  final ValueNotifier<bool> _isCheckingSession = ValueNotifier<bool>(true);
 
   @override
   void initState() {
     super.initState();
     _checkUserSession();
+  }
+
+  @override
+  void dispose() {
+    _isCheckingSession.dispose();
+    super.dispose();
   }
 
   Future<void> _checkUserSession() async {
@@ -32,39 +38,42 @@ class _IndexScreenState extends State<IndexScreen> {
       debugPrint("No Firebase user found");
     }
 
-    setState(() {
-      _isCheckingSession = false;
-    });
+    _isCheckingSession.value = false;
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_isCheckingSession) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    }
+    return ValueListenableBuilder<bool>(
+      valueListenable: _isCheckingSession,
+      builder: (context, isChecking, child) {
+        if (isChecking) {
+          return const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
 
-    return StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
+        return StreamBuilder(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Scaffold(
+                  body: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
 
-          if (snapshot.hasData) {
-            debugPrint("User authenticated, navigating to HomeScreen");
-            return const HomeScreen();
-          } else {
-            debugPrint("No authenticated user, navigating to LoginScreen");
-            return const LoginScreen();
-          }
-        });
+              if (snapshot.hasData) {
+                debugPrint("User authenticated, navigating to HomeScreen");
+                return const HomeScreen();
+              } else {
+                debugPrint("No authenticated user, navigating to LoginScreen");
+                return const LoginScreen();
+              }
+            });
+      },
+    );
   }
 }

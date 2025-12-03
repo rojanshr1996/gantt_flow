@@ -51,8 +51,10 @@ class _DriveFilesListState extends State<DriveFilesList> {
   }
 
   getDriveFiles() {
-    final eventProvider = Provider.of<EventServiceProvider>(context, listen: false);
-    final authProvider = Provider.of<AuthServiceProvider>(context, listen: false);
+    final eventProvider =
+        Provider.of<EventServiceProvider>(context, listen: false);
+    final authProvider =
+        Provider.of<AuthServiceProvider>(context, listen: false);
     eventProvider.nextPageToken == "";
 
     authProvider.refreshToken().then((data) async {
@@ -66,8 +68,10 @@ class _DriveFilesListState extends State<DriveFilesList> {
             // fileList = await driveApi.files.list();
             driveFiles = fileList.files ?? [];
 
-            driveFiles =
-                driveFiles.where((element) => element.mimeType != "application/vnd.google-apps.folder").toList();
+            driveFiles = driveFiles
+                .where((element) =>
+                    element.mimeType != "application/vnd.google-apps.folder")
+                .toList();
 
             selectedFilelList.clear();
             if (eventProvider.selectedFileList.isNotEmpty) {
@@ -79,7 +83,9 @@ class _DriveFilesListState extends State<DriveFilesList> {
                     break;
                   }
                 }
-                driveFiles = driveFiles.where((element) => element.id != file.id).toList();
+                driveFiles = driveFiles
+                    .where((element) => element.id != file.id)
+                    .toList();
               }
             }
 
@@ -100,8 +106,10 @@ class _DriveFilesListState extends State<DriveFilesList> {
   }
 
   _getMoreData(BuildContext context, String? pageToken) {
-    final eventProvider = Provider.of<EventServiceProvider>(context, listen: false);
-    final authProvider = Provider.of<AuthServiceProvider>(context, listen: false);
+    final eventProvider =
+        Provider.of<EventServiceProvider>(context, listen: false);
+    final authProvider =
+        Provider.of<AuthServiceProvider>(context, listen: false);
 
     if (!isScrollLoading) {
       setState(() {
@@ -110,7 +118,9 @@ class _DriveFilesListState extends State<DriveFilesList> {
       authProvider.refreshToken().then((data) async {
         if (data != "exception") {
           final result = await eventProvider.listGoogleDriveFiles(context,
-              pageToken: eventProvider.nextPageToken == "" ? "" : eventProvider.nextPageToken);
+              pageToken: eventProvider.nextPageToken == ""
+                  ? ""
+                  : eventProvider.nextPageToken);
 
           if (result != null) {
             if (result != "exception") {
@@ -124,8 +134,10 @@ class _DriveFilesListState extends State<DriveFilesList> {
                 }
               }
 
-              driveFiles =
-                  driveFiles.where((element) => element.mimeType != "application/vnd.google-apps.folder").toList();
+              driveFiles = driveFiles
+                  .where((element) =>
+                      element.mimeType != "application/vnd.google-apps.folder")
+                  .toList();
 
               selectedFilelList.clear();
               if (eventProvider.selectedFileList.isNotEmpty) {
@@ -137,7 +149,9 @@ class _DriveFilesListState extends State<DriveFilesList> {
                       break;
                     }
                   }
-                  driveFiles = driveFiles.where((element) => element.id != file.id).toList();
+                  driveFiles = driveFiles
+                      .where((element) => element.id != file.id)
+                      .toList();
                 }
               }
               debugPrint("Selected file list: $selectedFilelList");
@@ -159,7 +173,8 @@ class _DriveFilesListState extends State<DriveFilesList> {
 
   @override
   Widget build(BuildContext context) {
-    final eventProvider = Provider.of<EventServiceProvider>(context, listen: false);
+    final eventProvider =
+        Provider.of<EventServiceProvider>(context, listen: false);
 
     return RemoveFocus(
       child: BackgroundScaffold(
@@ -189,33 +204,51 @@ class _DriveFilesListState extends State<DriveFilesList> {
                                     ? const NoDataWidget(title: "No data")
                                     : GridView.builder(
                                         controller: _sc,
-                                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                                            maxCrossAxisExtent: Utilities.screenWidth(context) * 0.5,
-                                            childAspectRatio: 1 / 1,
-                                            crossAxisSpacing: 8,
-                                            mainAxisSpacing: 8),
+                                        gridDelegate:
+                                            SliverGridDelegateWithMaxCrossAxisExtent(
+                                                maxCrossAxisExtent:
+                                                    Utilities.screenWidth(
+                                                            context) *
+                                                        0.5,
+                                                childAspectRatio: 1 / 1,
+                                                crossAxisSpacing: 8,
+                                                mainAxisSpacing: 8),
                                         itemCount: driveFiles.length + 1,
                                         itemBuilder: (BuildContext ctx, index) {
                                           return index == driveFiles.length
-                                              ? LazyLoadingCircularLoader(isScrolling: isScrollLoading)
+                                              ? LazyLoadingCircularLoader(
+                                                  isScrolling: isScrollLoading)
                                               : fileTile(
                                                   file: driveFiles[index],
                                                   onTap: () {
                                                     setState(() {
-                                                      if (selectedFilelList.isEmpty) {
-                                                        selectedFilelList.add(driveFiles[index].id!);
+                                                      if (selectedFilelList
+                                                          .isEmpty) {
+                                                        selectedFilelList.add(
+                                                            driveFiles[index]
+                                                                .id!);
                                                       } else {
                                                         if (selectedFilelList
-                                                            .every((element) => element != driveFiles[index].id!)) {
-                                                          selectedFilelList.add(driveFiles[index].id!);
+                                                            .every((element) =>
+                                                                element !=
+                                                                driveFiles[
+                                                                        index]
+                                                                    .id!)) {
+                                                          selectedFilelList.add(
+                                                              driveFiles[index]
+                                                                  .id!);
                                                         } else {
                                                           selectedFilelList.removeAt(
-                                                              selectedFilelList.indexOf(driveFiles[index].id!));
+                                                              selectedFilelList
+                                                                  .indexOf(driveFiles[
+                                                                          index]
+                                                                      .id!));
                                                         }
                                                       }
                                                     });
 
-                                                    debugPrint("THIS IS THE SELECTED ID LIST: $selectedFilelList");
+                                                    debugPrint(
+                                                        "THIS IS THE SELECTED ID LIST: $selectedFilelList");
                                                   },
                                                 );
                                         }),
@@ -249,7 +282,8 @@ class _DriveFilesListState extends State<DriveFilesList> {
                               }
                             }
 
-                            debugPrint("FILE LIST: ${eventProvider.selectedFileList}");
+                            debugPrint(
+                                "FILE LIST: ${eventProvider.selectedFileList}");
                             Utilities.closeActivity(context);
                           }
                         },
@@ -281,7 +315,9 @@ class _DriveFilesListState extends State<DriveFilesList> {
           fit: StackFit.expand,
           children: [
             Container(
-              decoration: BoxDecoration(borderRadius: borderRadius, border: Border.all(color: AppColor.primary)),
+              decoration: BoxDecoration(
+                  borderRadius: borderRadius,
+                  border: Border.all(color: AppColor.primary)),
               child: Column(
                 children: [
                   Expanded(
@@ -300,7 +336,9 @@ class _DriveFilesListState extends State<DriveFilesList> {
                             ),
                           )
                         : file.mimeType! == "application/pdf"
-                            ? const SizedBox(child: Icon(Icons.picture_as_pdf, size: 54, color: AppColor.primary))
+                            ? const SizedBox(
+                                child: Icon(Icons.picture_as_pdf,
+                                    size: 54, color: AppColor.primary))
                             : Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: ClipRRect(
@@ -336,10 +374,12 @@ class _DriveFilesListState extends State<DriveFilesList> {
                     ),
                     child: Center(
                       child: Container(
-                        decoration: const BoxDecoration(color: AppColor.light, shape: BoxShape.circle),
+                        decoration: const BoxDecoration(
+                            color: AppColor.light, shape: BoxShape.circle),
                         child: const Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Icon(Icons.check_circle, color: AppColor.primary, size: 32),
+                          child: Icon(Icons.check_circle,
+                              color: AppColor.primary, size: 32),
                         ),
                       ),
                     ))

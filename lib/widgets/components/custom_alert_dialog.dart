@@ -41,14 +41,17 @@ class CustomAlertDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double paddingScaleFactor = _paddingScaleFactor(MediaQuery.of(context).textScaleFactor);
+    final double paddingScaleFactor =
+        _paddingScaleFactor(MediaQuery.of(context).textScaleFactor);
     final TextDirection textDirection = Directionality.of(context);
     Widget? titleWidget;
     Widget? contentWidget;
 
     if (title != null) {
-      final EdgeInsets defaultTitlePadding = EdgeInsets.fromLTRB(18.0, 18.0, 18.0, body == null ? 8.0 : 0.0);
-      final EdgeInsets effectiveTitlePadding = titlePadding?.resolve(textDirection) ?? defaultTitlePadding;
+      final EdgeInsets defaultTitlePadding =
+          EdgeInsets.fromLTRB(18.0, 18.0, 18.0, body == null ? 8.0 : 0.0);
+      final EdgeInsets effectiveTitlePadding =
+          titlePadding?.resolve(textDirection) ?? defaultTitlePadding;
       titleWidget = Padding(
         padding: EdgeInsets.only(
           left: effectiveTitlePadding.left * paddingScaleFactor,
@@ -65,12 +68,15 @@ class CustomAlertDialog extends StatelessWidget {
     }
 
     if (body != null) {
-      final EdgeInsets effectiveContentPadding = contentPadding.resolve(textDirection);
+      final EdgeInsets effectiveContentPadding =
+          contentPadding.resolve(textDirection);
       contentWidget = Padding(
         padding: EdgeInsets.only(
           left: effectiveContentPadding.left * paddingScaleFactor,
           right: effectiveContentPadding.right * paddingScaleFactor,
-          top: title == null ? effectiveContentPadding.top * paddingScaleFactor : effectiveContentPadding.top,
+          top: title == null
+              ? effectiveContentPadding.top * paddingScaleFactor
+              : effectiveContentPadding.top,
           bottom: effectiveContentPadding.bottom,
         ),
         child: body,
@@ -129,7 +135,8 @@ class CustomAlertDialog extends StatelessWidget {
     return Dialog(
       backgroundColor: AppColor.primary,
       elevation: 3,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
+      insetPadding:
+          const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
       clipBehavior: Clip.none,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       child: dialogChild,
@@ -138,7 +145,8 @@ class CustomAlertDialog extends StatelessWidget {
 }
 
 double _paddingScaleFactor(double textScaleFactor) {
-  final double clampedTextScaleFactor = textScaleFactor.clamp(1.0, 2.0).toDouble();
+  final double clampedTextScaleFactor =
+      textScaleFactor.clamp(1.0, 2.0).toDouble();
   // The final padding scale factor is clamped between 1/3 and 1. For example,
   // a non-scaled padding of 24 will produce a padding between 24 and 8.
   return lerpDouble(1.0, 1.0 / 3.0, clampedTextScaleFactor - 1.0)!;

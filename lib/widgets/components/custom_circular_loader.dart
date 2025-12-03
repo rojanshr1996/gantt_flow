@@ -6,7 +6,9 @@ class CustomCircularLoader extends StatelessWidget {
   final Color? color;
   final double? strokeWidth;
   final EdgeInsetsGeometry? padding;
-  const CustomCircularLoader({Key? key, this.color, this.strokeWidth = 8.0, this.padding}) : super(key: key);
+  const CustomCircularLoader(
+      {Key? key, this.color, this.strokeWidth = 8.0, this.padding})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +23,16 @@ class CustomCircularLoader extends StatelessWidget {
           child: Container(
             height: 60,
             width: 60,
-            decoration: const BoxDecoration(color: AppColor.primary, shape: BoxShape.circle),
+            decoration: const BoxDecoration(
+                color: AppColor.primary, shape: BoxShape.circle),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Center(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: CircularProgressIndicator(color: color ?? AppColor.secondary, strokeWidth: strokeWidth!),
+                  child: CircularProgressIndicator(
+                      color: color ?? AppColor.secondary,
+                      strokeWidth: strokeWidth!),
                 ),
               ),
             ),

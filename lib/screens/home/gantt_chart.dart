@@ -37,13 +37,15 @@ class GanttChart extends StatefulWidget {
 }
 
 class _GanttChartState extends State<GanttChart> {
-  int viewRangeToFitScreen = 5; // In order to show the number of date columns in the view
+  int viewRangeToFitScreen =
+      5; // In order to show the number of date columns in the view
   late int viewRange;
 
   @override
   void initState() {
     // Generate the date range to show in the chart.
-    viewRange = calculateNumberOfMonthsBetween(widget.fromDate!, widget.toDate!);
+    viewRange =
+        calculateNumberOfMonthsBetween(widget.fromDate!, widget.toDate!);
     super.initState();
   }
 
@@ -65,36 +67,49 @@ class _GanttChartState extends State<GanttChart> {
     if (eventStartedAt.compareTo(widget.fromDate!) <= 0) {
       return 0;
     } else {
-      return calculateNumberOfMonthsBetween(widget.fromDate!, eventStartedAt) - 1;
+      return calculateNumberOfMonthsBetween(widget.fromDate!, eventStartedAt) -
+          1;
     }
   }
 
   int calculateRemainingWidth(DateTime chartStartedAt, DateTime chartEndedAt) {
-    int chartLength = calculateNumberOfMonthsBetween(chartStartedAt, chartEndedAt);
-    if (chartStartedAt.compareTo(widget.fromDate!) >= 0 && chartStartedAt.compareTo(widget.toDate!) <= 0) {
+    int chartLength =
+        calculateNumberOfMonthsBetween(chartStartedAt, chartEndedAt);
+    if (chartStartedAt.compareTo(widget.fromDate!) >= 0 &&
+        chartStartedAt.compareTo(widget.toDate!) <= 0) {
       if (chartLength <= viewRange) {
         return chartLength;
       } else {
-        return viewRange - calculateNumberOfMonthsBetween(widget.fromDate!, chartStartedAt);
+        return viewRange -
+            calculateNumberOfMonthsBetween(widget.fromDate!, chartStartedAt);
       }
-    } else if (chartStartedAt.isBefore(widget.fromDate!) && chartEndedAt.isBefore(widget.fromDate!)) {
+    } else if (chartStartedAt.isBefore(widget.fromDate!) &&
+        chartEndedAt.isBefore(widget.fromDate!)) {
       return 0;
-    } else if (chartStartedAt.isBefore(widget.fromDate!) && chartEndedAt.isBefore(widget.toDate!)) {
-      return chartLength - calculateNumberOfMonthsBetween(chartStartedAt, widget.fromDate!);
-    } else if (chartStartedAt.isBefore(widget.fromDate!) && chartEndedAt.isAfter(widget.toDate!)) {
+    } else if (chartStartedAt.isBefore(widget.fromDate!) &&
+        chartEndedAt.isBefore(widget.toDate!)) {
+      return chartLength -
+          calculateNumberOfMonthsBetween(chartStartedAt, widget.fromDate!);
+    } else if (chartStartedAt.isBefore(widget.fromDate!) &&
+        chartEndedAt.isAfter(widget.toDate!)) {
       return viewRange;
     }
     return 0;
   }
 
   /// Widget to show the charts bars that shows the date and event summary on the chart
-  List<Widget> buildChartBars(List<google_api.Event> eventList, double chartViewWidth, BuildContext context,
+  List<Widget> buildChartBars(
+      List<google_api.Event> eventList,
+      double chartViewWidth,
+      BuildContext context,
       google_api.CalendarListEntry calendarEntry) {
     final List<Widget> chartBars = [];
 
     for (int i = 0; i < eventList.length; i++) {
-      var remainingWidth = calculateRemainingWidth(eventList[i].start!.dateTime ?? eventList[i].start!.date!,
-          eventList[i].end?.dateTime ?? eventList[i].end!.date!.subtract(const Duration(days: 1)));
+      var remainingWidth = calculateRemainingWidth(
+          eventList[i].start!.dateTime ?? eventList[i].start!.date!,
+          eventList[i].end?.dateTime ??
+              eventList[i].end!.date!.subtract(const Duration(days: 1)));
 
       if (remainingWidth > 0) {
         chartBars.add(
@@ -102,7 +117,9 @@ class _GanttChartState extends State<GanttChart> {
             height: 25.0,
             width: ((remainingWidth * chartViewWidth) / viewRangeToFitScreen),
             margin: EdgeInsets.only(
-              left: calculateDistanceToLeftBorder(eventList[i].start?.dateTime ?? eventList[i].start!.date!) *
+              left: calculateDistanceToLeftBorder(
+                      eventList[i].start?.dateTime ??
+                          eventList[i].start!.date!) *
                   chartViewWidth /
                   viewRangeToFitScreen,
               top: i == 0 ? 4.0 : 2.0,
@@ -117,10 +134,14 @@ class _GanttChartState extends State<GanttChart> {
                 onTap: () {
                   debugPrint("Open Event Detail: ${eventList[i].id}");
                   Utilities.openActivity(
-                      context, EventDetail(eventId: eventList[i].id!, calendarId: calendarEntry.id!));
+                      context,
+                      EventDetail(
+                          eventId: eventList[i].id!,
+                          calendarId: calendarEntry.id!));
                 },
                 child: SizedBox(
-                  width: ((remainingWidth * chartViewWidth) / viewRangeToFitScreen),
+                  width: ((remainingWidth * chartViewWidth) /
+                      viewRangeToFitScreen),
                   child: Padding(
                     padding: const EdgeInsets.all(6.0),
                     child: Text(
@@ -157,7 +178,9 @@ class _GanttChartState extends State<GanttChart> {
         ),
         child: const Padding(
           padding: EdgeInsets.all(8.0),
-          child: Text('CALENDAR', textAlign: TextAlign.center, style: CustomTextStyle.hintExtraSmallBold),
+          child: Text('CALENDAR',
+              textAlign: TextAlign.center,
+              style: CustomTextStyle.hintExtraSmallBold),
         ),
       ),
     );
@@ -207,7 +230,9 @@ class _GanttChartState extends State<GanttChart> {
                 right: BorderSide(color: AppColor.muted, width: 0.5),
                 bottom: BorderSide(color: AppColor.muted, width: 0.5)),
           ),
-          width: i == 0 ? (chartViewWidth / viewRangeToFitScreen) + 24 : chartViewWidth / viewRangeToFitScreen,
+          width: i == 0
+              ? (chartViewWidth / viewRangeToFitScreen) + 24
+              : chartViewWidth / viewRangeToFitScreen,
         ),
       );
     }
@@ -218,12 +243,18 @@ class _GanttChartState extends State<GanttChart> {
   }
 
   /// Widget to show all complete chart of the user that includes the calendar name as header title
-  Widget buildChartForEachUser(List<google_api.Event> eventList, double chartViewWidth,
-      google_api.CalendarListEntry calendarEntry, BuildContext context) {
-    var chartBars = buildChartBars(eventList, chartViewWidth, context, calendarEntry);
+  Widget buildChartForEachUser(
+      List<google_api.Event> eventList,
+      double chartViewWidth,
+      google_api.CalendarListEntry calendarEntry,
+      BuildContext context) {
+    var chartBars =
+        buildChartBars(eventList, chartViewWidth, context, calendarEntry);
 
     return SizedBox(
-      height: chartBars.length < 5 ? 5 * 29.0 + 38.0 + 11.0 : chartBars.length * 29.0 + 38.0 + 15.0,
+      height: chartBars.length < 5
+          ? 5 * 29.0 + 38.0 + 11.0
+          : chartBars.length * 29.0 + 38.0 + 15.0,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: <Widget>[
@@ -238,7 +269,8 @@ class _GanttChartState extends State<GanttChart> {
                 },
                 child: const Padding(
                   padding: EdgeInsets.fromLTRB(2, 4, 2, 4),
-                  child: Icon(Icons.more_vert, color: AppColor.primary, size: 20),
+                  child:
+                      Icon(Icons.more_vert, color: AppColor.primary, size: 20),
                 ),
               ),
             ),
@@ -254,9 +286,12 @@ class _GanttChartState extends State<GanttChart> {
                             decoration: const BoxDecoration(
                               color: AppColor.primaryLight,
                               border: Border(
-                                bottom: BorderSide(color: AppColor.muted, width: 0.5),
-                                left: BorderSide(color: AppColor.muted, width: 0.5),
-                                right: BorderSide(color: AppColor.muted, width: 0.5),
+                                bottom: BorderSide(
+                                    color: AppColor.muted, width: 0.5),
+                                left: BorderSide(
+                                    color: AppColor.muted, width: 0.5),
+                                right: BorderSide(
+                                    color: AppColor.muted, width: 0.5),
                               ),
                             ),
                             child: Center(
@@ -293,8 +328,11 @@ class _GanttChartState extends State<GanttChart> {
 
     for (var calEntry in widget.calendarEntry) {
       List<google_api.Event> ganttEvents = [];
-      ganttEvents = widget.eventList!.where((project) => project.organizer?.email == calEntry.id).toList();
-      chartContent.add(buildChartForEachUser(ganttEvents, chartViewWidth, calEntry, context));
+      ganttEvents = widget.eventList!
+          .where((project) => project.organizer?.email == calEntry.id)
+          .toList();
+      chartContent.add(buildChartForEachUser(
+          ganttEvents, chartViewWidth, calEntry, context));
     }
 
     return chartContent;
@@ -304,7 +342,9 @@ class _GanttChartState extends State<GanttChart> {
   Widget build(BuildContext context) {
     var chartViewWidth = Utilities.screenWidth(context);
     var screenOrientation = Utilities.screenOrientation(context);
-    screenOrientation == Orientation.landscape ? viewRangeToFitScreen = 10 : viewRangeToFitScreen = 5;
+    screenOrientation == Orientation.landscape
+        ? viewRangeToFitScreen = 10
+        : viewRangeToFitScreen = 5;
     return MediaQuery.removePadding(
       removeTop: true,
       context: context,
@@ -320,8 +360,10 @@ class _GanttChartState extends State<GanttChart> {
     );
   }
 
-  Future bottomSheet(BuildContext context, google_api.CalendarListEntry calEntry) {
-    final calendarProvider = Provider.of<CalendarServiceProvider>(context, listen: false);
+  Future bottomSheet(
+      BuildContext context, google_api.CalendarListEntry calEntry) {
+    final calendarProvider =
+        Provider.of<CalendarServiceProvider>(context, listen: false);
     return showModalBottomSheet(
       context: context,
       backgroundColor: AppColor.white,
@@ -341,13 +383,16 @@ class _GanttChartState extends State<GanttChart> {
                       children: [
                         TextSpan(
                             text: "Do you want to remove",
-                            style: CustomTextStyle.headerTextLight.copyWith(fontFamily: "nunitoSans")),
+                            style: CustomTextStyle.headerTextLight
+                                .copyWith(fontFamily: "nunitoSans")),
                         TextSpan(
                             text: " '${calEntry.summary}' ",
-                            style: CustomTextStyle.headerTextSecondary.copyWith(fontFamily: "nunitoSans")),
+                            style: CustomTextStyle.headerTextSecondary
+                                .copyWith(fontFamily: "nunitoSans")),
                         TextSpan(
                             text: "from the chart?",
-                            style: CustomTextStyle.headerTextLight.copyWith(fontFamily: "nunitoSans")),
+                            style: CustomTextStyle.headerTextLight
+                                .copyWith(fontFamily: "nunitoSans")),
                       ],
                     ),
                   ),
@@ -360,19 +405,22 @@ class _GanttChartState extends State<GanttChart> {
                     calendarProvider.loader = true;
                     widget.calendarEntry.remove(calEntry);
                     if (widget.calendarEntry.isNotEmpty) {
-                      for (google_api.CalendarListEntry calEntry in widget.calendarEntry) {
-                        encodedCalendarList
-                            .add(json.encode(calEntry)); //Encode the calendars list to save in preference
+                      for (google_api.CalendarListEntry calEntry
+                          in widget.calendarEntry) {
+                        encodedCalendarList.add(json.encode(
+                            calEntry)); //Encode the calendars list to save in preference
                       }
                     }
                     saveCalendarInPref(encodedCalendarList).then((data) {
                       if (widget.calendarEntry.isEmpty) {
-                        Utilities.fadeReplaceActivity(context, const HomeScreen());
+                        Utilities.fadeReplaceActivity(
+                            context, const HomeScreen());
                       }
                     });
 
                     calendarProvider.loader = false;
-                    showToast(message: "'${calEntry.summary}' deleted successfully");
+                    showToast(
+                        message: "'${calEntry.summary}' deleted successfully");
                   },
                 );
               },

@@ -30,14 +30,17 @@ class _AddCalendarEventDialogState extends State<AddCalendarEventDialog> {
   }
 
   getCalendarFromPref() async {
-    SharedPreferences _sharedPreferences = await SharedPreferences.getInstance();
-    encodedCalendarList = _sharedPreferences.getStringList("calendarList") ?? [];
+    SharedPreferences _sharedPreferences =
+        await SharedPreferences.getInstance();
+    encodedCalendarList =
+        _sharedPreferences.getStringList("calendarList") ?? [];
 
     if (encodedCalendarList.isNotEmpty) {
       for (String value in encodedCalendarList) {
         CalendarListEntry item = CalendarListEntry.fromJson(json.decode(value));
         if (calendarList.every((data) => data.id != item.id)) {
-          calendarList.add(item); //Add calendar to the list to show in the chart
+          calendarList
+              .add(item); //Add calendar to the list to show in the chart
         }
       }
     }
@@ -48,7 +51,8 @@ class _AddCalendarEventDialogState extends State<AddCalendarEventDialog> {
 
   @override
   Widget build(BuildContext context) {
-    const EdgeInsetsGeometry contentPadding = EdgeInsets.fromLTRB(12, 24, 12, 0);
+    const EdgeInsetsGeometry contentPadding =
+        EdgeInsets.fromLTRB(12, 24, 12, 0);
 
     return Dialog(
       backgroundColor: AppColor.light,
@@ -82,7 +86,8 @@ class _AddCalendarEventDialogState extends State<AddCalendarEventDialog> {
                                 child: CalendarListItem(
                                   name: calendarList[index].summary!,
                                   onTap: () {
-                                    Utilities.returnDataCloseActivity(context, calendarList[index]);
+                                    Utilities.returnDataCloseActivity(
+                                        context, calendarList[index]);
                                   },
                                 ),
                               );
@@ -94,7 +99,8 @@ class _AddCalendarEventDialogState extends State<AddCalendarEventDialog> {
             padding: const EdgeInsets.all(8.0),
             child: TextButton(
               onPressed: () => Utilities.closeActivity(context),
-              child: const Text('CANCEL', style: CustomTextStyle.bodyTextSecondary),
+              child: const Text('CANCEL',
+                  style: CustomTextStyle.bodyTextSecondary),
             ),
           )
         ],

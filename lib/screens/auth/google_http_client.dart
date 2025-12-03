@@ -7,7 +7,8 @@ class GoogleHttpClient extends IOClient {
   GoogleHttpClient(this._headers) : super();
 
   @override
-  Future<IOStreamedResponse> send(http.BaseRequest request) => super.send(request..headers.addAll(_headers));
+  Future<IOStreamedResponse> send(http.BaseRequest request) =>
+      super.send(request..headers.addAll(_headers));
 
   @override
   Future<http.Response> head(Uri url, {Map<String, String>? headers}) =>
