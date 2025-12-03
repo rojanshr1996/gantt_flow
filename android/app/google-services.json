@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "930996562736",
+    "project_id": "gantt-flow-7ca89",
+    "storage_bucket": "gantt-flow-7ca89.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:930996562736:android:bc2135855c1b816cfc36f5",
+        "android_client_info": {
+          "package_name": "com.thoughtsphere.gantt_flow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "930996562736-edca78mp3it2me7ect37a80so4legg21.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.thoughtsphere.gantt_flow",
+            "certificate_hash": "82864c66773ec18f0176ba46f42e824199e2595d"
+          }
+        },
+        {
+          "client_id": "930996562736-pfc0vvq1h5u64bjhoeecqa8u5mfiskea.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.thoughtsphere.gantt_flow",
+            "certificate_hash": "e8dcd4098134e7a32a8c0e3ced1eb5178f642da4"
+          }
+        },
+        {
+          "client_id": "930996562736-701bif5rajgbpgnvnejsdemrb6t2sp7d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvQQyiicUc5Usr7Lg-EMEB6aNGQPbHTi0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "930996562736-701bif5rajgbpgnvnejsdemrb6t2sp7d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "930996562736-8saiii26ln76thbkej9315lb7qb7ii02.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cdts.ganttMobile"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
