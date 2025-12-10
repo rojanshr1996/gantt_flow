@@ -925,11 +925,6 @@ class _EditEventState extends State<EditEvent> {
                       switchButtonDecoration: true,
                     ),
                   ),
-                  const ImageIcon(
-                    AssetImage('assets/images/rewards_inactive.png'),
-                    // size: 300,
-                    color: AppColor.muted,
-                  )
                 ],
               ),
             ),

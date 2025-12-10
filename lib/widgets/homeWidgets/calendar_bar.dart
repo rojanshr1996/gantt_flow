@@ -24,7 +24,7 @@ class CalendarBar extends StatefulWidget {
 
 class _CalendarBarState extends State<CalendarBar> {
   String? dropdownValue = 'MONTH';
-  List<String> optionValue = ['MONTH', 'YEAR'];
+  List<String> optionValue = ['DAY', 'MONTH', 'YEAR'];
   @override
   void initState() {
     super.initState();

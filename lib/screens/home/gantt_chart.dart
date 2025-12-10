@@ -41,6 +41,25 @@ class _GanttChartState extends State<GanttChart> {
       5; // In order to show the number of date columns in the view
   late int viewRange;
 
+  // Predefined dark colors for calendars
+  final List<Color> calendarColors = [
+    const Color(0xFF1976D2), // Blue
+    const Color(0xFF388E3C), // Green
+    const Color(0xFFD32F2F), // Red
+    const Color(0xFF7B1FA2), // Purple
+    const Color(0xFFF57C00), // Orange
+    const Color(0xFF0097A7), // Cyan
+    const Color(0xFFC2185B), // Pink
+    const Color(0xFF5D4037), // Brown
+    const Color(0xFF303F9F), // Indigo
+    const Color(0xFF00796B), // Teal
+    const Color(0xFFAFB42B), // Lime
+    const Color(0xFF512DA8), // Deep Purple
+    const Color(0xFFE64A19), // Deep Orange
+    const Color(0xFF0288D1), // Light Blue
+    const Color(0xFF689F38), // Light Green
+  ];
+
   @override
   void initState() {
     // Generate the date range to show in the chart.
@@ -49,52 +68,126 @@ class _GanttChartState extends State<GanttChart> {
     super.initState();
   }
 
-  // Gets the total numbers of months between the start and end date of the event.
+  // Get consistent color for a calendar based on its ID
+  Color getCalendarColor(String calendarId) {
+    final hash = calendarId.hashCode.abs();
+    return calendarColors[hash % calendarColors.length];
+  }
+
+  // Gets the total numbers of months/days/hours between the start and end date of the event.
   int calculateNumberOfMonthsBetween(DateTime from, DateTime to) {
     if (widget.calendarMode == "monthly") {
       return (to.day - from.day) + 1;
-    }
-    // else if (widget.calendarMode == "day") {
-    //   return to.difference(from).inHours + 1;
-    // }
-    else {
+    } else if (widget.calendarMode == "daily") {
+      return 24; // 24 hours in a day
+    } else {
       return to.month - from.month + 12 * (to.year - from.year) + 1;
+    }
+  }
+
+  // Gets the padding length of the event item from the left end of the chart (with fractional hours for daily view)
+  double calculateDistanceToLeftBorderPrecise(DateTime eventStartedAt) {
+    if (widget.calendarMode == "daily") {
+      // Convert to local time for display
+      final localEventStart = eventStartedAt.toLocal();
+      final localFromDate = widget.fromDate!.toLocal();
+
+      if (localEventStart.compareTo(localFromDate) <= 0) {
+        return 0.0;
+      } else if (localEventStart.day != localFromDate.day) {
+        return 0.0; // Event not on this day
+      } else {
+        // Calculate fractional hours (e.g., 10:30 = 10.5, 10:54 = 10.9)
+        return localEventStart.hour + (localEventStart.minute / 60.0);
+      }
+    } else {
+      if (eventStartedAt.compareTo(widget.fromDate!) <= 0) {
+        return 0.0;
+      } else {
+        return (calculateNumberOfMonthsBetween(
+                    widget.fromDate!, eventStartedAt) -
+                1)
+            .toDouble();
+      }
     }
   }
 
   // Gets the padding length of the event item from the left end of the chart
   int calculateDistanceToLeftBorder(DateTime eventStartedAt) {
-    if (eventStartedAt.compareTo(widget.fromDate!) <= 0) {
-      return 0;
+    return calculateDistanceToLeftBorderPrecise(eventStartedAt).floor();
+  }
+
+  // Calculate remaining width with precise fractional hours for daily view
+  double calculateRemainingWidthPrecise(
+      DateTime chartStartedAt, DateTime chartEndedAt) {
+    if (widget.calendarMode == "daily") {
+      // Convert to local time for display
+      final localChartStart = chartStartedAt.toLocal();
+      final localChartEnd = chartEndedAt.toLocal();
+      final localFromDate = widget.fromDate!.toLocal();
+
+      // For daily view, calculate hours
+      if (localChartStart.day != localFromDate.day &&
+          localChartEnd.day != localFromDate.day) {
+        return 0.0; // Event not on this day
+      }
+
+      // Calculate fractional hours for start and end
+      double startHourFractional = localChartStart.day == localFromDate.day
+          ? localChartStart.hour + (localChartStart.minute / 60.0)
+          : 0.0;
+      double endHourFractional = localChartEnd.day == localFromDate.day
+          ? localChartEnd.hour + (localChartEnd.minute / 60.0)
+          : 23.0 + (59.0 / 60.0);
+
+      // Calculate duration in fractional hours
+      if (localChartStart.day == localFromDate.day &&
+          localChartEnd.day == localFromDate.day) {
+        // Both start and end on the same day
+        double durationInHours =
+            localChartEnd.difference(localChartStart).inMinutes / 60.0;
+        return durationInHours > 0
+            ? durationInHours
+            : 0.1; // Minimum 0.1 hour (6 minutes) for visibility
+      } else if (localChartStart.day == localFromDate.day) {
+        return 24.0 - startHourFractional;
+      } else if (localChartEnd.day == localFromDate.day) {
+        return endHourFractional;
+      }
+      return 0.0;
     } else {
-      return calculateNumberOfMonthsBetween(widget.fromDate!, eventStartedAt) -
-          1;
+      int chartLength =
+          calculateNumberOfMonthsBetween(chartStartedAt, chartEndedAt).toInt();
+      if (chartStartedAt.compareTo(widget.fromDate!) >= 0 &&
+          chartStartedAt.compareTo(widget.toDate!) <= 0) {
+        if (chartLength <= viewRange) {
+          return chartLength.toDouble();
+        } else {
+          return (viewRange -
+                  calculateNumberOfMonthsBetween(
+                      widget.fromDate!, chartStartedAt))
+              .toDouble();
+        }
+      } else if (chartStartedAt.isBefore(widget.fromDate!) &&
+          chartEndedAt.isBefore(widget.fromDate!)) {
+        return 0.0;
+      } else if (chartStartedAt.isBefore(widget.fromDate!) &&
+          chartEndedAt.isBefore(widget.toDate!)) {
+        return (chartLength -
+                calculateNumberOfMonthsBetween(
+                    chartStartedAt, widget.fromDate!))
+            .toDouble();
+      } else if (chartStartedAt.isBefore(widget.fromDate!) &&
+          chartEndedAt.isAfter(widget.toDate!)) {
+        return viewRange.toDouble();
+      }
+      return 0.0;
     }
   }
 
+  // Integer version for backward compatibility
   int calculateRemainingWidth(DateTime chartStartedAt, DateTime chartEndedAt) {
-    int chartLength =
-        calculateNumberOfMonthsBetween(chartStartedAt, chartEndedAt);
-    if (chartStartedAt.compareTo(widget.fromDate!) >= 0 &&
-        chartStartedAt.compareTo(widget.toDate!) <= 0) {
-      if (chartLength <= viewRange) {
-        return chartLength;
-      } else {
-        return viewRange -
-            calculateNumberOfMonthsBetween(widget.fromDate!, chartStartedAt);
-      }
-    } else if (chartStartedAt.isBefore(widget.fromDate!) &&
-        chartEndedAt.isBefore(widget.fromDate!)) {
-      return 0;
-    } else if (chartStartedAt.isBefore(widget.fromDate!) &&
-        chartEndedAt.isBefore(widget.toDate!)) {
-      return chartLength -
-          calculateNumberOfMonthsBetween(chartStartedAt, widget.fromDate!);
-    } else if (chartStartedAt.isBefore(widget.fromDate!) &&
-        chartEndedAt.isAfter(widget.toDate!)) {
-      return viewRange;
-    }
-    return 0;
+    return calculateRemainingWidthPrecise(chartStartedAt, chartEndedAt).ceil();
   }
 
   /// Widget to show the charts bars that shows the date and event summary on the chart
@@ -104,22 +197,124 @@ class _GanttChartState extends State<GanttChart> {
       BuildContext context,
       google_api.CalendarListEntry calendarEntry) {
     final List<Widget> chartBars = [];
+    final calendarColor = getCalendarColor(calendarEntry.id!);
 
     for (int i = 0; i < eventList.length; i++) {
-      var remainingWidth = calculateRemainingWidth(
-          eventList[i].start!.dateTime ?? eventList[i].start!.date!,
-          eventList[i].end?.dateTime ??
-              eventList[i].end!.date!.subtract(const Duration(days: 1)));
+      final eventStart =
+          eventList[i].start!.dateTime ?? eventList[i].start!.date!;
+      final eventEnd = eventList[i].end?.dateTime ??
+          eventList[i].end!.date!.subtract(const Duration(days: 1));
+
+      var remainingWidth = calculateRemainingWidthPrecise(eventStart, eventEnd);
 
       if (remainingWidth > 0) {
-        chartBars.add(
-          Container(
+        // Check if we're in daily mode and on current day to show time progress
+        final now = DateTime.now();
+        final localEventStart = eventStart.toLocal();
+        final localEventEnd = eventEnd.toLocal();
+        final isCurrentDay = widget.calendarMode == "daily" &&
+            localEventStart.year == now.year &&
+            localEventStart.month == now.month &&
+            localEventStart.day == now.day;
+
+        Widget eventBar;
+
+        if (isCurrentDay &&
+            now.isAfter(localEventStart) &&
+            now.isBefore(localEventEnd)) {
+          // Event is in progress - split into past (transparent) and future (opaque) portions
+          final totalWidth =
+              (remainingWidth * chartViewWidth) / viewRangeToFitScreen;
+          final leftPosition =
+              calculateDistanceToLeftBorderPrecise(eventStart) *
+                  chartViewWidth /
+                  viewRangeToFitScreen;
+
+          // Calculate how much of the event has passed
+          final currentHourFractional = now.hour + (now.minute / 60.0);
+          final eventStartHourFractional =
+              localEventStart.hour + (localEventStart.minute / 60.0);
+          final eventDurationHours =
+              localEventEnd.difference(localEventStart).inMinutes / 60.0;
+          final elapsedHours = currentHourFractional - eventStartHourFractional;
+          final progressRatio = elapsedHours / eventDurationHours;
+
+          eventBar = Container(
+            height: 25.0,
+            width: totalWidth,
+            margin: EdgeInsets.only(
+              left: leftPosition,
+              top: i == 0 ? 4.0 : 2.0,
+              bottom: i == eventList.length - 1 ? 4.0 : 2.0,
+            ),
+            child: Stack(
+              children: [
+                // Past portion (semi-transparent)
+                Positioned(
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: totalWidth * progressRatio,
+                  child: Material(
+                    color: calendarColor.withOpacity(0.6),
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(5.0),
+                      bottomLeft: Radius.circular(5.0),
+                    ),
+                    child: Container(),
+                  ),
+                ),
+                // Future portion (opaque)
+                Positioned(
+                  left: totalWidth * progressRatio,
+                  top: 0,
+                  bottom: 0,
+                  right: 0,
+                  child: Material(
+                    color: calendarColor,
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(5.0),
+                      bottomRight: Radius.circular(5.0),
+                    ),
+                    child: Container(),
+                  ),
+                ),
+                // Event text and tap handler on top
+                Positioned.fill(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(5.0),
+                      onTap: () {
+                        debugPrint("Open Event Detail: ${eventList[i].id}");
+                        Utilities.openActivity(
+                            context,
+                            EventDetail(
+                                eventId: eventList[i].id!,
+                                calendarId: calendarEntry.id!));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Text(
+                          eventList[i].summary ?? "-- No title --",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: CustomTextStyle.extraSmallTextLight,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        } else if (isCurrentDay && now.isAfter(localEventEnd)) {
+          // Event has completely passed - make entire bar semi-transparent
+          eventBar = Container(
             height: 25.0,
             width: ((remainingWidth * chartViewWidth) / viewRangeToFitScreen),
             margin: EdgeInsets.only(
-              left: calculateDistanceToLeftBorder(
-                      eventList[i].start?.dateTime ??
-                          eventList[i].start!.date!) *
+              left: calculateDistanceToLeftBorderPrecise(eventStart) *
                   chartViewWidth /
                   viewRangeToFitScreen,
               top: i == 0 ? 4.0 : 2.0,
@@ -127,7 +322,7 @@ class _GanttChartState extends State<GanttChart> {
             ),
             alignment: Alignment.center,
             child: Material(
-              color: AppColor.primary,
+              color: calendarColor.withOpacity(0.4),
               borderRadius: BorderRadius.circular(5.0),
               child: InkWell(
                 borderRadius: BorderRadius.circular(5.0),
@@ -154,8 +349,52 @@ class _GanttChartState extends State<GanttChart> {
                 ),
               ),
             ),
-          ),
-        );
+          );
+        } else {
+          // Event hasn't started yet or not in daily view - show normal opaque bar
+          eventBar = Container(
+            height: 25.0,
+            width: ((remainingWidth * chartViewWidth) / viewRangeToFitScreen),
+            margin: EdgeInsets.only(
+              left: calculateDistanceToLeftBorderPrecise(eventStart) *
+                  chartViewWidth /
+                  viewRangeToFitScreen,
+              top: i == 0 ? 4.0 : 2.0,
+              bottom: i == eventList.length - 1 ? 4.0 : 2.0,
+            ),
+            alignment: Alignment.center,
+            child: Material(
+              color: calendarColor,
+              borderRadius: BorderRadius.circular(5.0),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(5.0),
+                onTap: () {
+                  debugPrint("Open Event Detail: ${eventList[i].id}");
+                  Utilities.openActivity(
+                      context,
+                      EventDetail(
+                          eventId: eventList[i].id!,
+                          calendarId: calendarEntry.id!));
+                },
+                child: SizedBox(
+                  width: ((remainingWidth * chartViewWidth) /
+                      viewRangeToFitScreen),
+                  child: Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Text(
+                      eventList[i].summary ?? "-- No title --",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: CustomTextStyle.extraSmallTextLight,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+
+        chartBars.add(eventBar);
       }
     }
 
@@ -186,6 +425,16 @@ class _GanttChartState extends State<GanttChart> {
     );
 
     for (int i = 0; i < viewRange; i++) {
+      String headerText;
+      if (widget.calendarMode == "daily") {
+        // Show hours in 24-hour format (00:00 to 23:00)
+        headerText = '${i.toString().padLeft(2, '0')}:00';
+      } else if (widget.calendarMode == "monthly") {
+        headerText = DateFormat.MMMd().format(tempDate);
+      } else {
+        headerText = DateFormat.yMMM().format(tempDate);
+      }
+
       headerItems.add(
         Container(
           width: chartViewWidth / viewRangeToFitScreen,
@@ -197,18 +446,19 @@ class _GanttChartState extends State<GanttChart> {
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(
-                widget.calendarMode == "monthly"
-                    ? DateFormat.MMMd().format(tempDate)
-                    : DateFormat.yMMM().format(tempDate),
+            child: Text(headerText,
                 textAlign: TextAlign.center,
                 style: CustomTextStyle.extraSmallTextSecondaryBold),
           ),
         ),
       );
-      widget.calendarMode == "monthly"
-          ? tempDate = tempDate.add(const Duration(days: 1))
-          : tempDate = utils.DateUtils.nextMonth(tempDate);
+
+      if (widget.calendarMode == "monthly") {
+        tempDate = tempDate.add(const Duration(days: 1));
+      } else if (widget.calendarMode == "yearly") {
+        tempDate = utils.DateUtils.nextMonth(tempDate);
+      }
+      // For daily mode, we don't need to increment tempDate as we're just showing hours
     }
 
     return Container(
@@ -331,6 +581,32 @@ class _GanttChartState extends State<GanttChart> {
       ganttEvents = widget.eventList!
           .where((project) => project.organizer?.email == calEntry.id)
           .toList();
+
+      // Filter events by date range for daily view
+      if (widget.calendarMode == "daily") {
+        final viewDate = widget.fromDate!.toLocal();
+        ganttEvents = ganttEvents.where((event) {
+          final eventStart =
+              (event.start?.dateTime ?? event.start?.date)?.toLocal();
+          final eventEnd = (event.end?.dateTime ?? event.end?.date)?.toLocal();
+
+          if (eventStart == null || eventEnd == null) return false;
+
+          // Check if event occurs on the viewing day
+          final viewDayStart =
+              DateTime(viewDate.year, viewDate.month, viewDate.day);
+          final viewDayEnd =
+              DateTime(viewDate.year, viewDate.month, viewDate.day, 23, 59, 59);
+
+          // Event overlaps with the viewing day if:
+          // - Event starts before or on the viewing day AND ends on or after the viewing day
+          return eventStart
+                  .isBefore(viewDayEnd.add(const Duration(seconds: 1))) &&
+              eventEnd
+                  .isAfter(viewDayStart.subtract(const Duration(seconds: 1)));
+        }).toList();
+      }
+
       chartContent.add(buildChartForEachUser(
           ganttEvents, chartViewWidth, calEntry, context));
     }
@@ -342,9 +618,15 @@ class _GanttChartState extends State<GanttChart> {
   Widget build(BuildContext context) {
     var chartViewWidth = Utilities.screenWidth(context);
     var screenOrientation = Utilities.screenOrientation(context);
-    screenOrientation == Orientation.landscape
-        ? viewRangeToFitScreen = 10
-        : viewRangeToFitScreen = 5;
+
+    // Adjust viewRangeToFitScreen based on calendar mode and orientation
+    if (widget.calendarMode == "daily") {
+      viewRangeToFitScreen =
+          screenOrientation == Orientation.landscape ? 12 : 6;
+    } else {
+      viewRangeToFitScreen =
+          screenOrientation == Orientation.landscape ? 10 : 5;
+    }
     return MediaQuery.removePadding(
       removeTop: true,
       context: context,

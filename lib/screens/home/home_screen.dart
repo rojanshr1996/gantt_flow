@@ -95,10 +95,12 @@ class _HomeScreenState extends State<HomeScreen>
       showDateHeader = DateFormat.yMMMM().format(fromDate);
       debugPrint("Monthly from date: $fromDate ----- Monthly to date: $toDate");
     } else if (layoutValue == "DAY") {
-      // fromDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 00, 00);
-      // toDate = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + 1, 00, 00);
-      // showDateHeader = DateFormat.yMMMM().format(fromDate);
-      // debugPrint(showDateHeader);
+      fromDate = DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0);
+      toDate = DateTime(DateTime.now().year, DateTime.now().month,
+          DateTime.now().day, 23, 59);
+      showDateHeader = DateFormat.yMMMd().format(fromDate);
+      debugPrint("Daily from date: $fromDate ----- Daily to date: $toDate");
     } else {
       fromDate = DateTime(DateTime.now().year, 1, 1);
       toDate = DateTime(DateTime.now().year + 1, 1, 0);
@@ -322,6 +324,31 @@ class _HomeScreenState extends State<HomeScreen>
     return;
   }
 
+  // Get date header with current marker (*)
+  String _getDateHeaderWithCurrentMarker() {
+    final now = DateTime.now();
+    bool isCurrent = false;
+    String dateText = '';
+
+    if (layoutValue == "MONTH") {
+      // Check if viewing current month
+      isCurrent = fromDate.year == now.year && fromDate.month == now.month;
+      dateText = DateFormat.yMMMM().format(fromDate);
+    } else if (layoutValue == "YEAR") {
+      // Check if viewing current year
+      isCurrent = fromDate.year == now.year;
+      dateText = DateFormat.y().format(fromDate);
+    } else {
+      // DAY mode - check if viewing current day
+      isCurrent = fromDate.year == now.year &&
+          fromDate.month == now.month &&
+          fromDate.day == now.day;
+      dateText = DateFormat.yMMMd().format(fromDate);
+    }
+
+    return isCurrent ? '$dateText *' : dateText;
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -377,7 +404,9 @@ class _HomeScreenState extends State<HomeScreen>
                                         GeneratedPdf(
                                           calendarMode: layoutValue == "YEAR"
                                               ? "yearly"
-                                              : "monthly",
+                                              : layoutValue == "DAY"
+                                                  ? "daily"
+                                                  : "monthly",
                                           fromDate: fromDate,
                                           toDate: toDate,
                                           calendarEntry: calendars,
@@ -409,14 +438,7 @@ class _HomeScreenState extends State<HomeScreen>
                                         color: AppColor.primary,
                                         child: ListTile(
                                           title: Text(
-                                            layoutValue == "MONTH"
-                                                ? DateFormat.yMMMM()
-                                                    .format(fromDate)
-                                                : layoutValue == "YEAR"
-                                                    ? DateFormat.y()
-                                                        .format(fromDate)
-                                                    : DateFormat.MMMd()
-                                                        .format(fromDate),
+                                            _getDateHeaderWithCurrentMarker(),
                                             textAlign: TextAlign.center,
                                             style: CustomTextStyle
                                                 .bodyTextLightBold,
@@ -438,11 +460,24 @@ class _HomeScreenState extends State<HomeScreen>
                                                   setState(() {});
                                                 } else if (layoutValue ==
                                                     "DAY") {
-                                                  // fromDate = fromDate.subtract(const Duration(days: 1));
-                                                  // toDate = toDate.subtract(const Duration(days: 1));
-                                                  // showDateHeader = DateFormat.yMMMM().format(fromDate);
-                                                  // debugPrint("Changed Date back (daily): $fromDate -> $toDate");
-                                                  // setState(() {});
+                                                  fromDate = DateTime(
+                                                      fromDate.year,
+                                                      fromDate.month,
+                                                      fromDate.day - 1,
+                                                      0,
+                                                      0);
+                                                  toDate = DateTime(
+                                                      toDate.year,
+                                                      toDate.month,
+                                                      toDate.day - 1,
+                                                      23,
+                                                      59);
+                                                  showDateHeader =
+                                                      DateFormat.yMMMd()
+                                                          .format(fromDate);
+                                                  debugPrint(
+                                                      "Changed Date back (daily): $fromDate -> $toDate");
+                                                  setState(() {});
                                                 } else {
                                                   fromDate = DateTime(
                                                       fromDate.year - 1, 1, 1);
@@ -475,11 +510,24 @@ class _HomeScreenState extends State<HomeScreen>
                                                   setState(() {});
                                                 } else if (layoutValue ==
                                                     "DAY") {
-                                                  // fromDate = fromDate.add(const Duration(days: 1));
-                                                  // toDate = toDate.add(const Duration(days: 1));
-                                                  // showDateHeader = DateFormat.yMMMM().format(fromDate);
-                                                  // debugPrint("Changed Date back (monthly): $fromDate -> $toDate");
-                                                  // setState(() {});
+                                                  fromDate = DateTime(
+                                                      fromDate.year,
+                                                      fromDate.month,
+                                                      fromDate.day + 1,
+                                                      0,
+                                                      0);
+                                                  toDate = DateTime(
+                                                      toDate.year,
+                                                      toDate.month,
+                                                      toDate.day + 1,
+                                                      23,
+                                                      59);
+                                                  showDateHeader =
+                                                      DateFormat.yMMMd()
+                                                          .format(fromDate);
+                                                  debugPrint(
+                                                      "Changed Date forward (daily): $fromDate -> $toDate");
+                                                  setState(() {});
                                                 } else {
                                                   fromDate = DateTime(
                                                       fromDate.year + 1, 1, 1);
@@ -514,7 +562,9 @@ class _HomeScreenState extends State<HomeScreen>
                                                 calendarMode:
                                                     layoutValue == "YEAR"
                                                         ? "yearly"
-                                                        : "monthly",
+                                                        : layoutValue == "DAY"
+                                                            ? "daily"
+                                                            : "monthly",
                                                 fromDate: fromDate,
                                                 toDate: toDate,
                                                 calendarEntry: calendars,
