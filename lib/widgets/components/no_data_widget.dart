@@ -15,10 +15,13 @@ class NoDataWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-          decoration: BoxDecoration(color: AppColor.pale.withOpacity(0.3), borderRadius: BorderRadius.circular(8)),
+          decoration: BoxDecoration(
+              color: AppColor.pale.withOpacity(0.3),
+              borderRadius: BorderRadius.circular(8)),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(title, style: textStyle ?? CustomTextStyle.bodyTextBold),
+            child:
+                Text(title, style: textStyle ?? CustomTextStyle.bodyTextBold),
           )),
     );
   }

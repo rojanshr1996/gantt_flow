@@ -55,15 +55,20 @@ class EventServiceProvider extends ChangeNotifier {
   }
 
   /// Fetch the event detail using the calendarID and eventId.
-  getEventDetail({required BuildContext context, required String calendarId, required String eventId}) async {
-    SharedPreferences _sharedPreferences = await SharedPreferences.getInstance();
+  getEventDetail(
+      {required BuildContext context,
+      required String calendarId,
+      required String eventId}) async {
+    SharedPreferences _sharedPreferences =
+        await SharedPreferences.getInstance();
     if (_sharedPreferences.getString("authUserHeader") != null) {
       try {
         late google_api.Event eventData;
         final authenticateClient = GoogleHttpClient(await getAuth());
-        final google_api.CalendarApi calendar = google_api.CalendarApi(authenticateClient);
-        final google_api.Events events = await calendar.events
-            .list(calendarId); // Pass the calendarID in order to get the events list in that particular calendar
+        final google_api.CalendarApi calendar =
+            google_api.CalendarApi(authenticateClient);
+        final google_api.Events events = await calendar.events.list(
+            calendarId); // Pass the calendarID in order to get the events list in that particular calendar
         for (google_api.Event event in events.items!) {
           if (event.id == eventId) {
             debugPrint("$calendarId ===> ${event.id} ===> ${event.etag}");
@@ -109,7 +114,8 @@ class EventServiceProvider extends ChangeNotifier {
     List<gdrive.File> attachments = const [],
     List<google_api.EventAttendee>? attendees = const [],
   }) async {
-    SharedPreferences _sharedPreferences = await SharedPreferences.getInstance();
+    SharedPreferences _sharedPreferences =
+        await SharedPreferences.getInstance();
     debugPrint("THIS IS THE ATTACHMENT LIST: $attachments");
     if (_sharedPreferences.getString("authUserHeader") != null) {
       try {
@@ -118,24 +124,29 @@ class EventServiceProvider extends ChangeNotifier {
         google_api.Event event = google_api.Event();
 
         final authenticateClient = GoogleHttpClient(await getAuth());
-        final google_api.CalendarApi calendar = google_api.CalendarApi(authenticateClient);
+        final google_api.CalendarApi calendar =
+            google_api.CalendarApi(authenticateClient);
 
         if (title != null) {
           event.summary = title; //Event title
         }
 
         if (allDayEvent) {
-          event.start =
-              google_api.EventDateTime(date: DateTime.parse(startTime!), timeZone: "GMT+05:45"); //Event Start dateTime
+          event.start = google_api.EventDateTime(
+              date: DateTime.parse(startTime!),
+              timeZone: "GMT+05:45"); //Event Start dateTime
 
           event.end = google_api.EventDateTime(
-              date: DateTime.parse(endTime!).add(const Duration(days: 1)), timeZone: "GMT+05:45"); //Event End dateTime
+              date: DateTime.parse(endTime!).add(const Duration(days: 1)),
+              timeZone: "GMT+05:45"); //Event End dateTime
         } else {
           event.start = google_api.EventDateTime(
-              dateTime: DateTime.parse(startTime!), timeZone: "GMT+05:45"); //Event Start dateTime
+              dateTime: DateTime.parse(startTime!),
+              timeZone: "GMT+05:45"); //Event Start dateTime
 
-          event.end =
-              google_api.EventDateTime(dateTime: DateTime.parse(endTime!), timeZone: "GMT+05:45"); //Event End dateTime
+          event.end = google_api.EventDateTime(
+              dateTime: DateTime.parse(endTime!),
+              timeZone: "GMT+05:45"); //Event End dateTime
         }
 
         if (description != null) {
@@ -170,7 +181,8 @@ class EventServiceProvider extends ChangeNotifier {
         debugPrint("${event.attachments?.first.fileId}");
 
         try {
-          eventData = await calendar.events.insert(event, calendarId!, sendUpdates: "all", supportsAttachments: true);
+          eventData = await calendar.events.insert(event, calendarId!,
+              sendUpdates: "all", supportsAttachments: true);
           return eventData;
         } on google_api.DetailedApiRequestError catch (e) {
           debugPrint("ERROR: $e");
@@ -218,7 +230,8 @@ class EventServiceProvider extends ChangeNotifier {
     List<gdrive.File> attachments = const [],
     bool allDayEvent = false,
   }) async {
-    SharedPreferences _sharedPreferences = await SharedPreferences.getInstance();
+    SharedPreferences _sharedPreferences =
+        await SharedPreferences.getInstance();
     if (_sharedPreferences.getString("authUserHeader") != null) {
       try {
         late google_api.Event? eventData;
@@ -226,24 +239,29 @@ class EventServiceProvider extends ChangeNotifier {
         google_api.Event event = google_api.Event();
 
         final authenticateClient = GoogleHttpClient(await getAuth());
-        final google_api.CalendarApi calendar = google_api.CalendarApi(authenticateClient);
+        final google_api.CalendarApi calendar =
+            google_api.CalendarApi(authenticateClient);
 
         if (title != null) {
           event.summary = title; //Event title
         }
 
         if (allDayEvent) {
-          event.start =
-              google_api.EventDateTime(date: DateTime.parse(startTime!), timeZone: "GMT+05:45"); //Event Start dateTime
+          event.start = google_api.EventDateTime(
+              date: DateTime.parse(startTime!),
+              timeZone: "GMT+05:45"); //Event Start dateTime
 
           event.end = google_api.EventDateTime(
-              date: DateTime.parse(endTime!).add(const Duration(days: 1)), timeZone: "GMT+05:45"); //Event End dateTime
+              date: DateTime.parse(endTime!).add(const Duration(days: 1)),
+              timeZone: "GMT+05:45"); //Event End dateTime
         } else {
           event.start = google_api.EventDateTime(
-              dateTime: DateTime.parse(startTime!), timeZone: "GMT+05:45"); //Event Start dateTime
+              dateTime: DateTime.parse(startTime!),
+              timeZone: "GMT+05:45"); //Event Start dateTime
 
-          event.end =
-              google_api.EventDateTime(dateTime: DateTime.parse(endTime!), timeZone: "GMT+05:45"); //Event End dateTime
+          event.end = google_api.EventDateTime(
+              dateTime: DateTime.parse(endTime!),
+              timeZone: "GMT+05:45"); //Event End dateTime
         }
 
         if (description != null) {
@@ -283,8 +301,8 @@ class EventServiceProvider extends ChangeNotifier {
 
         debugPrint("$calendarId ===> $eventId");
         try {
-          eventData =
-              await calendar.events.update(event, calendarId!, eventId!, sendUpdates: "all", supportsAttachments: true);
+          eventData = await calendar.events.update(event, calendarId!, eventId!,
+              sendUpdates: "all", supportsAttachments: true);
           debugPrint("THIS IS EVENT DATA EDITED: $eventData");
           return eventData;
         } on google_api.DetailedApiRequestError catch (e) {
@@ -318,16 +336,20 @@ class EventServiceProvider extends ChangeNotifier {
     }
   }
 
-  Future listGoogleDriveFiles(BuildContext context, {String pageToken = ""}) async {
-    SharedPreferences _sharedPreferences = await SharedPreferences.getInstance();
-    final eventProvider = Provider.of<EventServiceProvider>(context, listen: false);
+  Future listGoogleDriveFiles(BuildContext context,
+      {String pageToken = ""}) async {
+    SharedPreferences _sharedPreferences =
+        await SharedPreferences.getInstance();
+    final eventProvider =
+        Provider.of<EventServiceProvider>(context, listen: false);
     debugPrint("THIS IS THE PAGE TOKEN: $pageToken");
     if (_sharedPreferences.getString("authUserHeader") != null) {
       try {
         final authenticateClient = GoogleHttpClient(await getAuth());
 
         gdrive.DriveApi drive = gdrive.DriveApi(authenticateClient);
-        gdrive.FileList fileList = await drive.files.list(pageToken: pageToken, $fields: "*");
+        gdrive.FileList fileList =
+            await drive.files.list(pageToken: pageToken, $fields: "*");
 
         eventProvider.setNextPageToken(fileList.nextPageToken ?? "");
         return fileList;
@@ -348,16 +370,22 @@ class EventServiceProvider extends ChangeNotifier {
     }
   }
 
-  deleteEvent({required BuildContext context, required String calendarId, required String eventId}) async {
-    SharedPreferences _sharedPreferences = await SharedPreferences.getInstance();
+  deleteEvent(
+      {required BuildContext context,
+      required String calendarId,
+      required String eventId}) async {
+    SharedPreferences _sharedPreferences =
+        await SharedPreferences.getInstance();
     if (_sharedPreferences.getString("authUserHeader") != null) {
       try {
         final authenticateClient = GoogleHttpClient(await getAuth());
-        final google_api.CalendarApi calendar = google_api.CalendarApi(authenticateClient);
+        final google_api.CalendarApi calendar =
+            google_api.CalendarApi(authenticateClient);
 
         try {
           // await calendar.events.delete(calendarId, eventId);
-          return await calendar.events.delete(calendarId, eventId, sendUpdates: "all");
+          return await calendar.events
+              .delete(calendarId, eventId, sendUpdates: "all");
         } on google_api.DetailedApiRequestError catch (e) {
           debugPrint("ERROR: $e");
           if (e.status == 401) {

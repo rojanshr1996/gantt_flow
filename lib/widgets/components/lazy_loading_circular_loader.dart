@@ -5,7 +5,10 @@ class LazyLoadingCircularLoader extends StatelessWidget {
   final bool isScrolling;
   final EdgeInsetsGeometry padding;
 
-  const LazyLoadingCircularLoader({Key? key, required this.isScrolling, this.padding = const EdgeInsets.all(8.0)})
+  const LazyLoadingCircularLoader(
+      {Key? key,
+      required this.isScrolling,
+      this.padding = const EdgeInsets.all(8.0)})
       : super(key: key);
   @override
   Widget build(BuildContext context) {

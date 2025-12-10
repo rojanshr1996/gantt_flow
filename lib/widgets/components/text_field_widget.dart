@@ -50,10 +50,14 @@ class TextFieldWidget extends StatelessWidget {
       this.autofocus = false,
       this.onTap,
       this.contentPadding,
-      this.enabledBorder = const UnderlineInputBorder(borderSide: BorderSide(color: AppColor.primary, width: 1)),
-      this.disabledBorder = const UnderlineInputBorder(borderSide: BorderSide(color: AppColor.muted, width: 1)),
-      this.focusedBorder = const UnderlineInputBorder(borderSide: BorderSide(color: AppColor.primaryDark, width: 1.5)),
-      this.errorBorder = const UnderlineInputBorder(borderSide: BorderSide(color: AppColor.danger, width: 1.5)),
+      this.enabledBorder = const UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColor.primary, width: 1)),
+      this.disabledBorder = const UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColor.muted, width: 1)),
+      this.focusedBorder = const UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColor.primaryDark, width: 1.5)),
+      this.errorBorder = const UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColor.danger, width: 1.5)),
       this.onFormSubmitted,
       this.textInputAction,
       this.maxLength,
@@ -73,7 +77,8 @@ class TextFieldWidget extends StatelessWidget {
         headingField
             ? Text(
                 title ?? "",
-                style: TextStyle(fontSize: 14, color: headerColor ?? AppColor.primary),
+                style: TextStyle(
+                    fontSize: 14, color: headerColor ?? AppColor.primary),
               )
             : Container(),
         TextFormField(

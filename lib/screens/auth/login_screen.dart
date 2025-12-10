@@ -46,7 +46,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(24, 12, 24, 12),
                   child: ButtonWidget(
-                    title: authProvider.authWaiting ? "" : "SIGN IN WITH GOOGLE",
+                    title:
+                        authProvider.authWaiting ? "" : "SIGN IN WITH GOOGLE",
                     borderRadius: BorderRadius.circular(8),
                     buttonColor: AppColor.danger,
                     onTap: () async {
@@ -59,7 +60,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         debugPrint("This is the result: $result");
 
                         // Only navigate if sign-in was successful
-                        if (result != null && result != "exception" && result != "cancelled") {
+                        if (result != null &&
+                            result != "exception" &&
+                            result != "cancelled") {
                           showToast(message: "Sign-in successful");
                           // Navigation is handled by IndexScreen's StreamBuilder
                           // which listens to Firebase auth state changes
@@ -73,11 +76,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       } catch (error) {
                         authProvider.authWaiting = false;
                         debugPrint("Sign-in exception: $error");
-                        showToast(message: "An unexpected error occurred. Please try again.");
+                        showToast(
+                            message:
+                                "An unexpected error occurred. Please try again.");
                       }
                     },
                     textStyle: CustomTextStyle.bodyTextLight,
-                    prefixIcon: const FaIcon(FontAwesomeIcons.google, color: AppColor.primaryLight),
+                    prefixIcon: const FaIcon(FontAwesomeIcons.google,
+                        color: AppColor.primaryLight),
                     loader: authProvider.authWaiting ? true : false,
                   ),
                 );

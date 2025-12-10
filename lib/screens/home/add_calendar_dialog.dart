@@ -37,8 +37,10 @@ class _AddCalendarDialogState extends State<AddCalendarDialog> {
   }
 
   Future<void> getCalendar(BuildContext context) async {
-    final calProvider = Provider.of<CalendarServiceProvider>(context, listen: false);
-    final authProvider = Provider.of<AuthServiceProvider>(context, listen: false);
+    final calProvider =
+        Provider.of<CalendarServiceProvider>(context, listen: false);
+    final authProvider =
+        Provider.of<AuthServiceProvider>(context, listen: false);
     authProvider.refreshToken().then((data) async {
       if (data != "exception") {
         final result = await calProvider.getCalendarList(context);
@@ -46,7 +48,8 @@ class _AddCalendarDialogState extends State<AddCalendarDialog> {
         setState(() {});
         if (result != null && result != "exception") {
           debugPrint("THIS IS CALENDAR LIST: $result");
-          final List<CalendarListEntry> resultList = (result as List).cast<CalendarListEntry>();
+          final List<CalendarListEntry> resultList =
+              (result as List).cast<CalendarListEntry>();
           if (resultList.isNotEmpty) {
             calendarList = resultList;
           }
@@ -71,7 +74,8 @@ class _AddCalendarDialogState extends State<AddCalendarDialog> {
 
   @override
   Widget build(BuildContext context) {
-    const EdgeInsetsGeometry contentPadding = EdgeInsets.fromLTRB(12, 24, 12, 0);
+    const EdgeInsetsGeometry contentPadding =
+        EdgeInsets.fromLTRB(12, 24, 12, 0);
 
     return Dialog(
       backgroundColor: AppColor.light,
@@ -107,7 +111,8 @@ class _AddCalendarDialogState extends State<AddCalendarDialog> {
                                     child: CalendarListItem(
                                       name: calendarList[index].summary!,
                                       onTap: () {
-                                        Utilities.returnDataCloseActivity(context, calendarList[index]);
+                                        Utilities.returnDataCloseActivity(
+                                            context, calendarList[index]);
                                       },
                                     ),
                                   );
@@ -121,7 +126,8 @@ class _AddCalendarDialogState extends State<AddCalendarDialog> {
             padding: const EdgeInsets.all(8.0),
             child: TextButton(
               onPressed: () => Utilities.closeActivity(context),
-              child: const Text('CANCEL', style: CustomTextStyle.bodyTextSecondary),
+              child: const Text('CANCEL',
+                  style: CustomTextStyle.bodyTextSecondary),
             ),
           )
         ],

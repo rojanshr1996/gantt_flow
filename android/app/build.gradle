@@ -62,7 +62,12 @@ android {
     }
 
     signingConfigs {
-      
+        debug {
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storeFile file('debug-keystore.jks')
+            storePassword 'android'
+        }
         release {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
@@ -72,7 +77,9 @@ android {
     }
 
     buildTypes {
-       
+        debug {
+            signingConfig signingConfigs.debug
+        }
         release {
             signingConfig signingConfigs.release
 

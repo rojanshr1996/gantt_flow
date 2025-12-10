@@ -71,7 +71,10 @@ class _CreateEventState extends State<CreateEvent> {
   }
 
   void showCalendarDialog() {
-    showDialog(builder: (BuildContext ctx) => const AddCalendarEventDialog(), context: context).then((calendar) {
+    showDialog(
+            builder: (BuildContext ctx) => const AddCalendarEventDialog(),
+            context: context)
+        .then((calendar) {
       if (calendar != null) {
         debugPrint("RETURNED CALENDAR: ${calendar.summary}");
         selectedCalendar = calendar;
@@ -83,14 +86,16 @@ class _CreateEventState extends State<CreateEvent> {
   }
 
   void clearSelection() {
-    final eventProvider = Provider.of<EventServiceProvider>(context, listen: false);
+    final eventProvider =
+        Provider.of<EventServiceProvider>(context, listen: false);
     eventProvider.clearFileList();
   }
 
   @override
   Widget build(BuildContext context) {
     FocusScopeNode currentFocus = FocusScope.of(context);
-    final eventProvider = Provider.of<EventServiceProvider>(context, listen: false);
+    final eventProvider =
+        Provider.of<EventServiceProvider>(context, listen: false);
 
     return RemoveFocus(
       child: BackgroundScaffold(
@@ -120,7 +125,8 @@ class _CreateEventState extends State<CreateEvent> {
                                 child: ListView(
                                   children: [
                                     GestureDetector(
-                                      onTap: () => currentFocus.requestFocus(FocusNode()),
+                                      onTap: () => currentFocus
+                                          .requestFocus(FocusNode()),
                                       child: TextFieldWidget(
                                         autofocus: false,
                                         hintText: "EVENT TITLE",
@@ -128,9 +134,14 @@ class _CreateEventState extends State<CreateEvent> {
                                         obscureText: false,
                                         textInputType: TextInputType.text,
                                         validator: (String? value) =>
-                                            validateEmptyField(context: context, value: value!, fieldName: "Title"),
-                                        contentPadding: const EdgeInsets.all(12),
-                                        prefixIcon: const Icon(Icons.title, color: AppColor.primary),
+                                            validateEmptyField(
+                                                context: context,
+                                                value: value!,
+                                                fieldName: "Title"),
+                                        contentPadding:
+                                            const EdgeInsets.all(12),
+                                        prefixIcon: const Icon(Icons.title,
+                                            color: AppColor.primary),
                                       ),
                                     ),
                                     const SizedBox(height: 12),
@@ -144,8 +155,10 @@ class _CreateEventState extends State<CreateEvent> {
                                       textEditingController: calendarController,
                                       obscureText: false,
                                       textInputType: TextInputType.text,
-                                      suffixIcon: calendarController.text.isEmpty
-                                          ? const Icon(Icons.arrow_drop_down, color: AppColor.primary)
+                                      suffixIcon: calendarController
+                                              .text.isEmpty
+                                          ? const Icon(Icons.arrow_drop_down,
+                                              color: AppColor.primary)
                                           : IconButton(
                                               onPressed: () {
                                                 setState(() {
@@ -157,9 +170,14 @@ class _CreateEventState extends State<CreateEvent> {
                                               color: AppColor.danger,
                                             ),
                                       contentPadding: const EdgeInsets.all(12),
-                                      disabledBorder: const UnderlineInputBorder(
-                                          borderSide: BorderSide(color: AppColor.primary, width: 1)),
-                                      prefixIcon: const Icon(Icons.calendar_today, color: AppColor.primary),
+                                      disabledBorder:
+                                          const UnderlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: AppColor.primary,
+                                                  width: 1)),
+                                      prefixIcon: const Icon(
+                                          Icons.calendar_today,
+                                          color: AppColor.primary),
                                     ),
                                     const SizedBox(height: 12),
                                     Padding(
@@ -175,9 +193,13 @@ class _CreateEventState extends State<CreateEvent> {
 
                                             if (isSwitched) {
                                               startCheckDate = DateTime(
-                                                  DateTime.now().year, DateTime.now().month, DateTime.now().day);
+                                                  DateTime.now().year,
+                                                  DateTime.now().month,
+                                                  DateTime.now().day);
                                               endCheckDate = DateTime(
-                                                  DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
+                                                  DateTime.now().year,
+                                                  DateTime.now().month,
+                                                  DateTime.now().day + 1);
                                             }
                                           });
                                         },
@@ -187,10 +209,16 @@ class _CreateEventState extends State<CreateEvent> {
                                     Stack(
                                       children: [
                                         DateTimePicker(
-                                          type: isSwitched ? DateTimePickerType.date : DateTimePickerType.dateTime,
-                                          dateMask: isSwitched ? 'd MMMM, yyyy ' : 'd MMMM, yyyy - hh:mm a',
+                                          type: isSwitched
+                                              ? DateTimePickerType.date
+                                              : DateTimePickerType.dateTime,
+                                          dateMask: isSwitched
+                                              ? 'd MMMM, yyyy '
+                                              : 'd MMMM, yyyy - hh:mm a',
                                           controller: startDateController,
-                                          dateHintText: isSwitched ? "EVENT START DATE" : "EVENT START TIME",
+                                          dateHintText: isSwitched
+                                              ? "EVENT START DATE"
+                                              : "EVENT START TIME",
                                           firstDate: DateTime(2021),
                                           lastDate: DateTime(2100),
                                           locale: const Locale("en", "US"),
@@ -198,15 +226,23 @@ class _CreateEventState extends State<CreateEvent> {
                                             setState(() {
                                               startDateController.text = val;
                                               if (!isSwitched) {
-                                                if (DateTime.parse(startDateController.text).isBefore(DateTime.now())) {
+                                                if (DateTime.parse(
+                                                        startDateController
+                                                            .text)
+                                                    .isBefore(DateTime.now())) {
                                                   startShowNotification = false;
                                                 } else {
                                                   startShowNotification = true;
                                                 }
                                               } else {
-                                                DateTime date = DateTime.parse(startDateController.text);
-                                                if (DateTime(date.year, date.month, date.day).isBefore(DateTime(
-                                                    DateTime.now().year, DateTime.now().month, DateTime.now().day))) {
+                                                DateTime date = DateTime.parse(
+                                                    startDateController.text);
+                                                if (DateTime(date.year,
+                                                        date.month, date.day)
+                                                    .isBefore(DateTime(
+                                                        DateTime.now().year,
+                                                        DateTime.now().month,
+                                                        DateTime.now().day))) {
                                                   startShowNotification = false;
                                                 } else {
                                                   startShowNotification = true;
@@ -214,40 +250,57 @@ class _CreateEventState extends State<CreateEvent> {
                                               }
                                             });
                                           },
-                                          icon: const Icon(Icons.watch_later_outlined, color: AppColor.primary),
+                                          icon: const Icon(
+                                              Icons.watch_later_outlined,
+                                              color: AppColor.primary),
                                         ),
                                         startDateController.text.isEmpty
                                             ? Container()
                                             : Positioned(
                                                 child: Align(
-                                                  alignment: Alignment.centerRight,
+                                                  alignment:
+                                                      Alignment.centerRight,
                                                   child: IconButton(
                                                       onPressed: () {
                                                         setState(() {
-                                                          startDateController.clear();
-                                                          startShowNotification = true;
+                                                          startDateController
+                                                              .clear();
+                                                          startShowNotification =
+                                                              true;
                                                         });
                                                       },
-                                                      icon: const Icon(Icons.close, color: AppColor.danger)),
+                                                      icon: const Icon(
+                                                          Icons.close,
+                                                          color:
+                                                              AppColor.danger)),
                                                 ),
                                               )
                                       ],
                                     ),
-                                    SizedBox(height: startShowNotification ? 0 : 8),
+                                    SizedBox(
+                                        height: startShowNotification ? 0 : 8),
                                     startShowNotification
                                         ? Container()
                                         : Text(
                                             "Since the event starts before the current date, no notification will be sent to the attendees (if any).",
                                             style: CustomTextStyle.smallText
-                                                .copyWith(fontStyle: FontStyle.italic, color: AppColor.danger)),
+                                                .copyWith(
+                                                    fontStyle: FontStyle.italic,
+                                                    color: AppColor.danger)),
                                     const SizedBox(height: 12),
                                     Stack(
                                       children: [
                                         DateTimePicker(
-                                          type: isSwitched ? DateTimePickerType.date : DateTimePickerType.dateTime,
-                                          dateMask: isSwitched ? 'd MMMM, yyyy ' : 'd MMMM, yyyy - hh:mm a',
+                                          type: isSwitched
+                                              ? DateTimePickerType.date
+                                              : DateTimePickerType.dateTime,
+                                          dateMask: isSwitched
+                                              ? 'd MMMM, yyyy '
+                                              : 'd MMMM, yyyy - hh:mm a',
                                           controller: endDateController,
-                                          dateHintText: isSwitched ? "EVENT END DATE" : "EVENT END TIME",
+                                          dateHintText: isSwitched
+                                              ? "EVENT END DATE"
+                                              : "EVENT END TIME",
                                           firstDate: DateTime(2021),
                                           lastDate: DateTime(2100),
                                           locale: const Locale("en", "US"),
@@ -255,15 +308,22 @@ class _CreateEventState extends State<CreateEvent> {
                                             setState(() {
                                               endDateController.text = val;
                                               if (!isSwitched) {
-                                                if (DateTime.parse(endDateController.text).isBefore(DateTime.now())) {
+                                                if (DateTime.parse(
+                                                        endDateController.text)
+                                                    .isBefore(DateTime.now())) {
                                                   endShowNotification = false;
                                                 } else {
                                                   endShowNotification = true;
                                                 }
                                               } else {
-                                                DateTime date = DateTime.parse(endDateController.text);
-                                                if (DateTime(date.year, date.month, date.day).isBefore(DateTime(
-                                                    DateTime.now().year, DateTime.now().month, DateTime.now().day))) {
+                                                DateTime date = DateTime.parse(
+                                                    endDateController.text);
+                                                if (DateTime(date.year,
+                                                        date.month, date.day)
+                                                    .isBefore(DateTime(
+                                                        DateTime.now().year,
+                                                        DateTime.now().month,
+                                                        DateTime.now().day))) {
                                                   endShowNotification = false;
                                                 } else {
                                                   endShowNotification = true;
@@ -271,71 +331,102 @@ class _CreateEventState extends State<CreateEvent> {
                                               }
                                             });
                                           },
-                                          icon: const Icon(Icons.watch_later_outlined, color: AppColor.primary),
+                                          icon: const Icon(
+                                              Icons.watch_later_outlined,
+                                              color: AppColor.primary),
                                         ),
                                         endDateController.text.isEmpty
                                             ? Container()
                                             : Positioned(
                                                 child: Align(
-                                                  alignment: Alignment.centerRight,
+                                                  alignment:
+                                                      Alignment.centerRight,
                                                   child: IconButton(
                                                       onPressed: () {
                                                         setState(() {
-                                                          endDateController.clear();
-                                                          endShowNotification = true;
+                                                          endDateController
+                                                              .clear();
+                                                          endShowNotification =
+                                                              true;
                                                         });
                                                       },
-                                                      icon: const Icon(Icons.close, color: AppColor.danger)),
+                                                      icon: const Icon(
+                                                          Icons.close,
+                                                          color:
+                                                              AppColor.danger)),
                                                 ),
                                               )
                                       ],
                                     ),
-                                    SizedBox(height: endShowNotification ? 0 : 8),
+                                    SizedBox(
+                                        height: endShowNotification ? 0 : 8),
                                     endShowNotification
                                         ? Container()
                                         : Text(
                                             "Since the event ends before the current date, no notification will be sent to the attendees (if any).",
                                             style: CustomTextStyle.smallText
-                                                .copyWith(fontStyle: FontStyle.italic, color: AppColor.danger)),
+                                                .copyWith(
+                                                    fontStyle: FontStyle.italic,
+                                                    color: AppColor.danger)),
                                     const SizedBox(height: 12),
                                     GestureDetector(
-                                      onTap: () => currentFocus.requestFocus(FocusNode()),
+                                      onTap: () => currentFocus
+                                          .requestFocus(FocusNode()),
                                       child: TextFieldWidget(
                                         autofocus: false,
                                         hintText: "LOCATION",
-                                        textEditingController: locationController,
+                                        textEditingController:
+                                            locationController,
                                         obscureText: false,
                                         textInputType: TextInputType.text,
-                                        contentPadding: const EdgeInsets.all(12),
-                                        prefixIcon: const Icon(Icons.location_pin, color: AppColor.primary),
+                                        contentPadding:
+                                            const EdgeInsets.all(12),
+                                        prefixIcon: const Icon(
+                                            Icons.location_pin,
+                                            color: AppColor.primary),
                                       ),
                                     ),
                                     const SizedBox(height: 12),
                                     const Padding(
-                                      padding: EdgeInsets.only(top: 8, bottom: 4),
-                                      child: Text("DESCRIPTION", style: CustomTextStyle.hintSmallTextBold),
+                                      padding:
+                                          EdgeInsets.only(top: 8, bottom: 4),
+                                      child: Text("DESCRIPTION",
+                                          style: CustomTextStyle
+                                              .hintSmallTextBold),
                                     ),
                                     GestureDetector(
-                                      onTap: () => currentFocus.requestFocus(FocusNode()),
+                                      onTap: () => currentFocus
+                                          .requestFocus(FocusNode()),
                                       child: TextFieldWidget(
                                         autofocus: false,
                                         hintText: "Add event description...",
-                                        textEditingController: descriptionController,
+                                        textEditingController:
+                                            descriptionController,
                                         maxLines: 4,
                                         obscureText: false,
-                                        textInputType: TextInputType.visiblePassword,
-                                        contentPadding: const EdgeInsets.all(12),
+                                        textInputType:
+                                            TextInputType.visiblePassword,
+                                        contentPadding:
+                                            const EdgeInsets.all(12),
                                         focusedBorder: const OutlineInputBorder(
-                                          borderSide: BorderSide(color: AppColor.primaryDark, width: 1.5),
+                                          borderSide: BorderSide(
+                                              color: AppColor.primaryDark,
+                                              width: 1.5),
                                         ),
                                         enabledBorder: const OutlineInputBorder(
-                                          borderSide: BorderSide(color: AppColor.primary, width: 1),
+                                          borderSide: BorderSide(
+                                              color: AppColor.primary,
+                                              width: 1),
                                         ),
-                                        disabledBorder: const OutlineInputBorder(
-                                          borderSide: BorderSide(color: AppColor.muted, width: 1),
+                                        disabledBorder:
+                                            const OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: AppColor.muted, width: 1),
                                         ),
                                         errorBorder: const OutlineInputBorder(
-                                          borderSide: BorderSide(color: AppColor.danger, width: 1.5),
+                                          borderSide: BorderSide(
+                                              color: AppColor.danger,
+                                              width: 1.5),
                                         ),
                                       ),
                                     ),
@@ -344,24 +435,31 @@ class _CreateEventState extends State<CreateEvent> {
                                       children: [
                                         Expanded(
                                           child: GestureDetector(
-                                            onTap: () => currentFocus.requestFocus(FocusNode()),
+                                            onTap: () => currentFocus
+                                                .requestFocus(FocusNode()),
                                             child: TextFieldWidget(
                                               autofocus: false,
                                               hintText: "ATTENDEES",
-                                              textEditingController: attendeesController,
+                                              textEditingController:
+                                                  attendeesController,
                                               obscureText: false,
                                               textInputType: TextInputType.text,
-                                              contentPadding: const EdgeInsets.all(12),
-                                              prefixIcon: const Icon(Icons.groups, color: AppColor.primary),
+                                              contentPadding:
+                                                  const EdgeInsets.all(12),
+                                              prefixIcon: const Icon(
+                                                  Icons.groups,
+                                                  color: AppColor.primary),
                                               onChanged: (String val) {
                                                 setState(() {});
                                               },
-                                              suffixIcon: attendeesController.text.isEmpty
+                                              suffixIcon: attendeesController
+                                                      .text.isEmpty
                                                   ? const SizedBox()
                                                   : IconButton(
                                                       onPressed: () {
                                                         setState(() {
-                                                          attendeesController.clear();
+                                                          attendeesController
+                                                              .clear();
                                                         });
                                                       },
                                                       icon: const Icon(
@@ -375,22 +473,36 @@ class _CreateEventState extends State<CreateEvent> {
                                         const SizedBox(width: 4),
                                         Material(
                                           color: AppColor.primary,
-                                          borderRadius: BorderRadius.circular(8),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
                                           child: TextButton(
                                             onPressed: () {
-                                              if (validateEmail(context: context, value: attendeesController.text) ==
+                                              if (validateEmail(
+                                                      context: context,
+                                                      value: attendeesController
+                                                          .text) ==
                                                   null) {
                                                 setState(() {
-                                                  EventAttendee eventAttendee = EventAttendee();
-                                                  eventAttendee.email = attendeesController.text.trim();
+                                                  EventAttendee eventAttendee =
+                                                      EventAttendee();
+                                                  eventAttendee.email =
+                                                      attendeesController.text
+                                                          .trim();
                                                   EventAttendee();
 
                                                   if (attendeesList!.every(
-                                                      (element) => element.email != attendeesController.text.trim())) {
+                                                      (element) =>
+                                                          element.email !=
+                                                          attendeesController
+                                                              .text
+                                                              .trim())) {
                                                     attendeesController.clear();
-                                                    attendeesList?.add(eventAttendee);
+                                                    attendeesList
+                                                        ?.add(eventAttendee);
                                                   } else {
-                                                    showToast(message: "Email already added");
+                                                    showToast(
+                                                        message:
+                                                            "Email already added");
                                                   }
                                                 });
                                               } else {
@@ -401,7 +513,8 @@ class _CreateEventState extends State<CreateEvent> {
                                             },
                                             child: const Text(
                                               "ADD",
-                                              style: CustomTextStyle.bodyTextLight,
+                                              style:
+                                                  CustomTextStyle.bodyTextLight,
                                             ),
                                           ),
                                         ),
@@ -412,15 +525,21 @@ class _CreateEventState extends State<CreateEvent> {
                                         ? const SizedBox()
                                         : Container(
                                             decoration: BoxDecoration(
-                                                color: AppColor.light, borderRadius: BorderRadius.circular(8)),
+                                                color: AppColor.light,
+                                                borderRadius:
+                                                    BorderRadius.circular(8)),
                                             child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               child: SizedBox(
                                                 child: Wrap(
                                                   direction: Axis.horizontal,
-                                                  children: attendeesList!.map<Widget>((item) {
+                                                  children: attendeesList!
+                                                      .map<Widget>((item) {
                                                     return Padding(
-                                                      padding: const EdgeInsets.only(right: 8.0),
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              right: 8.0),
                                                       child: attendeesTag(item),
                                                     );
                                                   }).toList(),
@@ -428,7 +547,9 @@ class _CreateEventState extends State<CreateEvent> {
                                               ),
                                             ),
                                           ),
-                                    SizedBox(height: attendeesList!.isEmpty ? 12 : 4),
+                                    SizedBox(
+                                        height:
+                                            attendeesList!.isEmpty ? 12 : 4),
                                     Row(
                                       children: [
                                         OutlinedButton.icon(
@@ -437,32 +558,43 @@ class _CreateEventState extends State<CreateEvent> {
                                             color: AppColor.primary,
                                           ),
                                           onPressed: () {
-                                            Utilities.openActivity(context, const DriveFilesList());
+                                            Utilities.openActivity(context,
+                                                const DriveFilesList());
                                           },
                                           style: ButtonStyle(
-                                            backgroundColor: WidgetStateProperty.all<Color?>(AppColor.light),
-                                            side: WidgetStateProperty.all<BorderSide?>(
-                                                const BorderSide(color: AppColor.primary)),
+                                            backgroundColor:
+                                                WidgetStateProperty.all<Color?>(
+                                                    AppColor.light),
+                                            side: WidgetStateProperty.all<
+                                                    BorderSide?>(
+                                                const BorderSide(
+                                                    color: AppColor.primary)),
                                           ),
                                           label: const Text("ATTACHMENTS"),
                                         ),
                                       ],
                                     ),
                                     const SizedBox(height: 4),
-                                    Consumer<EventServiceProvider>(builder: (context, eventProvider, _) {
-                                      return eventProvider.selectedFileList.isEmpty
+                                    Consumer<EventServiceProvider>(
+                                        builder: (context, eventProvider, _) {
+                                      return eventProvider
+                                              .selectedFileList.isEmpty
                                           ? const SizedBox()
                                           : Container(
-                                              width: Utilities.screenWidth(context),
+                                              width: Utilities.screenWidth(
+                                                  context),
                                               color: AppColor.light,
                                               height: 120,
                                               child: ListView.builder(
                                                 shrinkWrap: true,
-                                                scrollDirection: Axis.horizontal,
-                                                itemCount: eventProvider.selectedFileList.length,
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                itemCount: eventProvider
+                                                    .selectedFileList.length,
                                                 itemBuilder: (context, index) {
                                                   return Padding(
-                                                    padding: const EdgeInsets.all(8),
+                                                    padding:
+                                                        const EdgeInsets.all(8),
                                                     child: Stack(
                                                       clipBehavior: Clip.none,
                                                       children: [
@@ -471,19 +603,34 @@ class _CreateEventState extends State<CreateEvent> {
                                                             height: 90,
                                                             width: 110,
                                                             decoration: BoxDecoration(
-                                                                borderRadius: BorderRadius.circular(8),
-                                                                color: AppColor.primaryLight,
-                                                                border: Border.all(color: AppColor.primary)),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8),
+                                                                color: AppColor
+                                                                    .primaryLight,
+                                                                border: Border.all(
+                                                                    color: AppColor
+                                                                        .primary)),
                                                             child: Column(
                                                               children: [
                                                                 Expanded(
-                                                                  child: eventProvider.selectedFileList[index].mimeType!
-                                                                          .startsWith("image")
+                                                                  child: eventProvider
+                                                                          .selectedFileList[
+                                                                              index]
+                                                                          .mimeType!
+                                                                          .startsWith(
+                                                                              "image")
                                                                       ? Padding(
-                                                                          padding: const EdgeInsets.all(2.0),
-                                                                          child: ClipRRect(
-                                                                            borderRadius: BorderRadius.circular(8),
-                                                                            child: Image.network(
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              2.0),
+                                                                          child:
+                                                                              ClipRRect(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(8),
+                                                                            child:
+                                                                                Image.network(
                                                                               "${eventProvider.selectedFileList[index].thumbnailLink}",
                                                                               fit: BoxFit.cover,
                                                                               width: double.maxFinite,
@@ -492,12 +639,10 @@ class _CreateEventState extends State<CreateEvent> {
                                                                             ),
                                                                           ),
                                                                         )
-                                                                      : eventProvider
-                                                                                  .selectedFileList[index].mimeType! ==
+                                                                      : eventProvider.selectedFileList[index].mimeType! ==
                                                                               "application/pdf"
                                                                           ? const SizedBox(
-                                                                              child: Icon(Icons.picture_as_pdf,
-                                                                                  size: 54, color: AppColor.primary))
+                                                                              child: Icon(Icons.picture_as_pdf, size: 54, color: AppColor.primary))
                                                                           : Padding(
                                                                               padding: const EdgeInsets.all(8.0),
                                                                               child: ClipRRect(
@@ -514,12 +659,21 @@ class _CreateEventState extends State<CreateEvent> {
                                                                             ),
                                                                 ),
                                                                 Padding(
-                                                                  padding: const EdgeInsets.all(4),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          4),
                                                                   child: Text(
-                                                                    eventProvider.selectedFileList[index].name!,
+                                                                    eventProvider
+                                                                        .selectedFileList[
+                                                                            index]
+                                                                        .name!,
                                                                     maxLines: 1,
-                                                                    style: CustomTextStyle.extraSmallText,
-                                                                    overflow: TextOverflow.ellipsis,
+                                                                    style: CustomTextStyle
+                                                                        .extraSmallText,
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
                                                                   ),
                                                                 )
                                                               ],
@@ -529,22 +683,43 @@ class _CreateEventState extends State<CreateEvent> {
                                                         Positioned(
                                                           top: 2,
                                                           right: -6,
-                                                          child: Consumer<EventServiceProvider>(
-                                                            builder: (context, newsfeedProvider, _) {
+                                                          child: Consumer<
+                                                              EventServiceProvider>(
+                                                            builder: (context,
+                                                                newsfeedProvider,
+                                                                _) {
                                                               return InkWell(
-                                                                borderRadius: BorderRadius.circular(50),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            50),
                                                                 onTap: () {
-                                                                  eventProvider.selectedFileList
-                                                                      .remove(eventProvider.selectedFileList[index]);
+                                                                  eventProvider
+                                                                      .selectedFileList
+                                                                      .remove(eventProvider
+                                                                              .selectedFileList[
+                                                                          index]);
 
-                                                                  setState(() {});
+                                                                  setState(
+                                                                      () {});
                                                                 },
-                                                                child: Container(
+                                                                child:
+                                                                    Container(
                                                                   decoration: const BoxDecoration(
-                                                                      color: AppColor.danger, shape: BoxShape.circle),
-                                                                  padding: const EdgeInsets.all(2),
-                                                                  child: const Icon(Icons.close,
-                                                                      color: AppColor.white, size: 20),
+                                                                      color: AppColor
+                                                                          .danger,
+                                                                      shape: BoxShape
+                                                                          .circle),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          2),
+                                                                  child: const Icon(
+                                                                      Icons
+                                                                          .close,
+                                                                      color: AppColor
+                                                                          .white,
+                                                                      size: 20),
                                                                 ),
                                                               );
                                                             },
@@ -580,44 +755,59 @@ class _CreateEventState extends State<CreateEvent> {
                       rightButtonFuntion: () async {
                         currentFocus.unfocus();
 
-                        final eventProvider = Provider.of<EventServiceProvider>(context, listen: false);
+                        final eventProvider = Provider.of<EventServiceProvider>(
+                            context,
+                            listen: false);
                         final FormState? form = _formKey.currentState;
 
                         if (selectedCalendar != null) {
                           if (form!.validate()) {
-                            if (DateTime.parse(endDateController.text)
-                                .isBefore(DateTime.parse(startDateController.text))) {
-                              showToast(message: "End date cannot come before start date.");
+                            if (DateTime.parse(endDateController.text).isBefore(
+                                DateTime.parse(startDateController.text))) {
+                              showToast(
+                                  message:
+                                      "End date cannot come before start date.");
                             } else {
                               setState(() {
                                 loader = true;
                               });
 
-                              final authProvider = Provider.of<AuthServiceProvider>(context, listen: false);
+                              final authProvider =
+                                  Provider.of<AuthServiceProvider>(context,
+                                      listen: false);
 
                               authProvider.refreshToken().then((data) async {
                                 if (data != "exception") {
-                                  final result = await eventProvider.insertEvent(
-                                      context: context,
-                                      calendarId: selectedCalendar?.id,
-                                      title: titleController.text,
-                                      startTime: startDateController.text,
-                                      endTime: endDateController.text,
-                                      description: descriptionController.text,
-                                      location: locationController.text,
-                                      allDayEvent: isSwitched,
-                                      attachments: eventProvider.selectedFileList,
-                                      attendees: attendeesList);
+                                  final result =
+                                      await eventProvider.insertEvent(
+                                          context: context,
+                                          calendarId: selectedCalendar?.id,
+                                          title: titleController.text,
+                                          startTime: startDateController.text,
+                                          endTime: endDateController.text,
+                                          description:
+                                              descriptionController.text,
+                                          location: locationController.text,
+                                          allDayEvent: isSwitched,
+                                          attachments:
+                                              eventProvider.selectedFileList,
+                                          attendees: attendeesList);
 
                                   setState(() {
                                     loader = false;
                                   });
                                   if (result != "exception") {
                                     if (result.status == "confirmed") {
-                                      showToast(message: "Event created successfully");
-                                      Utilities.returnDataCloseActivity(context, "${result.status}");
+                                      // Mark that an event was created so home screen reloads
+                                      eventProvider.setEventEdited(true);
+                                      showToast(
+                                          message:
+                                              "Event created successfully");
+                                      Utilities.returnDataCloseActivity(
+                                          context, "${result.status}");
                                     } else {
-                                      showToast(message: "Event creation failed");
+                                      showToast(
+                                          message: "Event creation failed");
                                     }
                                   } else {
                                     showToast(message: "Event creation failed");
@@ -629,7 +819,8 @@ class _CreateEventState extends State<CreateEvent> {
                             }
                           }
                         } else {
-                          showToast(message: "Please select a calendar to continue");
+                          showToast(
+                              message: "Please select a calendar to continue");
                         }
                       },
                       switchButtonDecoration: true,

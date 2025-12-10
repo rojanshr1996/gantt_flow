@@ -39,8 +39,12 @@ class CustomSwitch extends StatelessWidget {
           ),
           Platform.isIOS
               ? CupertinoSwitch(
-                  trackColor: switchValue ? AppColor.primaryLight : trackColor ?? AppColor.primaryDark,
-                  thumbColor: switchValue ? AppColor.light : thumbColor ?? AppColor.pale,
+                  trackColor: switchValue
+                      ? AppColor.primaryLight
+                      : trackColor ?? AppColor.primaryDark,
+                  thumbColor: switchValue
+                      ? AppColor.light
+                      : thumbColor ?? AppColor.pale,
                   value: switchValue,
                   onChanged: onChanged,
                   activeColor: AppColor.secondary,

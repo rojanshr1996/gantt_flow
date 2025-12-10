@@ -39,7 +39,9 @@ class TwoButtonWidget extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 4.0),
                   child: Material(
-                    color: switchButtonDecoration ? AppColor.transparent : buttonColor ?? AppColor.secondary,
+                    color: switchButtonDecoration
+                        ? AppColor.transparent
+                        : buttonColor ?? AppColor.secondary,
                     borderRadius: const BorderRadius.all(Radius.circular(8)),
                     child: InkWell(
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -48,13 +50,18 @@ class TwoButtonWidget extends StatelessWidget {
                         height: buttonHeight,
                         decoration: switchButtonDecoration
                             ? BoxDecoration(
-                                border: Border.all(color: buttonColor ?? AppColor.secondary, width: 1.5),
-                                borderRadius: const BorderRadius.all(Radius.circular(8)))
+                                border: Border.all(
+                                    color: buttonColor ?? AppColor.secondary,
+                                    width: 1.5),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(8)))
                             : const BoxDecoration(),
                         child: Center(
                             child: Text(
                           leftButtonText!.toUpperCase(),
-                          style: switchButtonDecoration ? rightButtonTextStyle : leftButtonTextStyle,
+                          style: switchButtonDecoration
+                              ? rightButtonTextStyle
+                              : leftButtonTextStyle,
                         )),
                       ),
                     ),
@@ -67,7 +74,9 @@ class TwoButtonWidget extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 4.0),
                   child: Material(
-                    color: switchButtonDecoration ? AppColor.secondary : AppColor.transparent,
+                    color: switchButtonDecoration
+                        ? AppColor.secondary
+                        : AppColor.transparent,
                     borderRadius: const BorderRadius.all(Radius.circular(8)),
                     child: InkWell(
                       borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -76,13 +85,18 @@ class TwoButtonWidget extends StatelessWidget {
                         decoration: switchButtonDecoration
                             ? const BoxDecoration()
                             : BoxDecoration(
-                                border: Border.all(color: buttonColor ?? AppColor.secondary, width: 1),
-                                borderRadius: const BorderRadius.all(Radius.circular(8))),
+                                border: Border.all(
+                                    color: buttonColor ?? AppColor.secondary,
+                                    width: 1),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(8))),
                         height: buttonHeight,
                         child: Center(
                             child: Text(
                           rightButtonText!,
-                          style: switchButtonDecoration ? leftButtonTextStyle : rightButtonTextStyle,
+                          style: switchButtonDecoration
+                              ? leftButtonTextStyle
+                              : rightButtonTextStyle,
                         )),
                       ),
                     ),

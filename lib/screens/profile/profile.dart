@@ -43,20 +43,24 @@ class _ProfileState extends State<Profile> {
                         child: Center(
                           child: Material(
                             elevation: 4,
-                            borderRadius: const BorderRadius.all(Radius.circular(100.0)),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(100.0)),
                             child: Container(
                               width: 150,
                               height: 150,
                               decoration: BoxDecoration(
-                                  border: Border.all(color: AppColor.primary, width: 5),
+                                  border: Border.all(
+                                      color: AppColor.primary, width: 5),
                                   shape: BoxShape.circle,
                                   color: AppColor.secondary),
                               child: user.photoURL == null
                                   ? Center(
-                                      child:
-                                          Text(getInitials(user.displayName ?? ""), style: CustomTextStyle.titleLight))
+                                      child: Text(
+                                          getInitials(user.displayName ?? ""),
+                                          style: CustomTextStyle.titleLight))
                                   : CircleAvatar(
-                                      backgroundImage: NetworkImage(user.photoURL!),
+                                      backgroundImage:
+                                          NetworkImage(user.photoURL!),
                                       backgroundColor: AppColor.secondary,
                                       maxRadius: 100,
                                     ),
@@ -74,9 +78,13 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      InfoFieldWidget(fieldInfo: user.email ?? " ---- ", fieldName: "EMAIL"),
+                      InfoFieldWidget(
+                          fieldInfo: user.email ?? " ---- ",
+                          fieldName: "EMAIL"),
                       const SizedBox(height: 12),
-                      InfoFieldWidget(fieldInfo: user.phoneNumber ?? " ---- ", fieldName: "PHONE"),
+                      InfoFieldWidget(
+                          fieldInfo: user.phoneNumber ?? " ---- ",
+                          fieldName: "PHONE"),
                     ],
                   ),
                 ),

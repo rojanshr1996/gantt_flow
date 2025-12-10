@@ -10,7 +10,14 @@ class SafeHeader extends StatelessWidget {
   final bool? left;
   final bool? right;
 
-  const SafeHeader({Key? key, required this.child, this.color, this.top, this.bottom, this.left, this.right})
+  const SafeHeader(
+      {Key? key,
+      required this.child,
+      this.color,
+      this.top,
+      this.bottom,
+      this.left,
+      this.right})
       : super(key: key);
   @override
   Widget build(BuildContext context) {

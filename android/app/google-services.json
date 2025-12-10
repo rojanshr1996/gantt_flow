@@ -14,19 +14,27 @@
       },
       "oauth_client": [
         {
-          "client_id": "930996562736-edca78mp3it2me7ect37a80so4legg21.apps.googleusercontent.com",
+          "client_id": "930996562736-64d16hp0cn210l1nej4dpin2r9nv78s6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.thoughtsphere.gantt_flow",
-            "certificate_hash": "82864c66773ec18f0176ba46f42e824199e2595d"
+            "certificate_hash": "5947c6fa2be46d29b9bfb6e18c967bdf793f8aa5"
           }
         },
         {
-          "client_id": "930996562736-pfc0vvq1h5u64bjhoeecqa8u5mfiskea.apps.googleusercontent.com",
+          "client_id": "930996562736-gip7pe64qds63prqecet5adv1ek2rj7k.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.thoughtsphere.gantt_flow",
-            "certificate_hash": "e8dcd4098134e7a32a8c0e3ced1eb5178f642da4"
+            "certificate_hash": "e74c6c276fa9cc6095cce2509ff950b3330996c0"
+          }
+        },
+        {
+          "client_id": "930996562736-q8nh9o0ebgs3id0hi6t6nqr5ts95k0am.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.thoughtsphere.gantt_flow",
+            "certificate_hash": "f4735fa56908f8c7c6bbb8dd3709145e50a1e871"
           }
         },
         {

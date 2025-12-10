@@ -6,12 +6,15 @@ class SimpleCircularLoader extends StatelessWidget {
   final double? strokeWidth;
   final EdgeInsetsGeometry? padding;
 
-  const SimpleCircularLoader({Key? key, this.color, this.strokeWidth = 8.0, this.padding}) : super(key: key);
+  const SimpleCircularLoader(
+      {Key? key, this.color, this.strokeWidth = 8.0, this.padding})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: padding ?? const EdgeInsets.all(36.0),
-      child: CircularProgressIndicator(color: color ?? AppColor.secondary, strokeWidth: strokeWidth!),
+      child: CircularProgressIndicator(
+          color: color ?? AppColor.secondary, strokeWidth: strokeWidth!),
     );
   }
 }
