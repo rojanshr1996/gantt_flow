@@ -217,6 +217,9 @@ class _GanttChartState extends State<GanttChart> {
             localEventStart.month == now.month &&
             localEventStart.day == now.day;
 
+        // Check if event has completely passed (for all calendar modes)
+        final eventHasPassed = now.isAfter(localEventEnd);
+
         Widget eventBar;
 
         if (isCurrentDay &&
@@ -308,8 +311,8 @@ class _GanttChartState extends State<GanttChart> {
               ],
             ),
           );
-        } else if (isCurrentDay && now.isAfter(localEventEnd)) {
-          // Event has completely passed - make entire bar semi-transparent
+        } else if (eventHasPassed) {
+          // Event has completely passed - make entire bar semi-transparent (for all calendar modes)
           eventBar = Container(
             height: 25.0,
             width: ((remainingWidth * chartViewWidth) / viewRangeToFitScreen),
