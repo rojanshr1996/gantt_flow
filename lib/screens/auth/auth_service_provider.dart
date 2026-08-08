@@ -14,11 +14,9 @@ class AuthServiceProvider extends ChangeNotifier {
 
   /// Google sign in scopes for asking permissions to the user. Calendar and Drive permissions are required to use the app
   final googleSignIn = GoogleSignIn(scopes: <String>[
-    gdrive.DriveApi.driveScope,
-    google_api.CalendarApi.calendarScope,
-    google_api.CalendarApi.calendarReadonlyScope,
     google_api.CalendarApi.calendarEventsScope,
-    google_api.CalendarApi.calendarEventsReadonlyScope,
+    google_api.CalendarApi.calendarReadonlyScope,
+    gdrive.DriveApi.driveReadonlyScope,
   ]);
 
   GoogleSignInAccount? _user;

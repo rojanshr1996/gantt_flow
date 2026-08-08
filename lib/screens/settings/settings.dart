@@ -144,7 +144,7 @@ class _SettingsState extends State<Settings> {
                                   leadingIcon: Icons.privacy_tip_outlined,
                                   onTap: () async {
                                     final Uri url = Uri.parse(
-                                        'https://www.freeprivacypolicy.com/live/b2a1fdd5-bca9-42c1-9d38-9d348568229f');
+                                        'https://gantt-flow-7ca89.web.app/privacy');
                                     if (await canLaunchUrl(url)) {
                                       await launchUrl(url,
                                           mode: LaunchMode.externalApplication);
@@ -161,7 +161,7 @@ class _SettingsState extends State<Settings> {
                                   leadingIcon: Icons.description_outlined,
                                   onTap: () async {
                                     final Uri url = Uri.parse(
-                                        'https://www.freeprivacypolicy.com/live/6cdec090-e11e-4483-b45f-705733872437');
+                                        'https://gantt-flow-7ca89.web.app/terms');
                                     try {
                                       if (await canLaunchUrl(url)) {
                                         await launchUrl(url,

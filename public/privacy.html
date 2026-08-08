@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — Gantt Flow</title>
+  <meta name="description" content="Official Privacy Policy for Gantt Flow detailing data collection, Google API usage, storage, data deletion, and user rights.">
+  <meta name="google-site-verification" content="9vTXYSY_K4XmJjd9Dfdrg7tdnhkeNyMYh7BexcRoHe4" />
+  <link rel="icon" type="image/png" href="ganttLogoDark.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header>
+    <div class="nav-container">
+      <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 8px;">
+        <img src="ganttLogoTrans.png" alt="Gantt Flow Logo" style="height: 38px;">
+        <span>Gantt Flow</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="privacy.html" style="color: var(--text-main);">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms of Service</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="legal-content">
+    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 1.5rem;">
+      <img src="ganttLogoDark.png" alt="Gantt Flow Logo" style="width: 56px; height: 56px; border-radius: 12px;">
+      <div>
+        <h1 style="margin: 0; font-size: 2.2rem;">Privacy Policy</h1>
+        <p class="date" style="margin: 0; border: none; padding: 0;">Gantt Flow Application</p>
+      </div>
+    </div>
+    <p class="date">Last Updated: August 7, 2026</p>
+
+    <p>Gantt Flow ("we", "our", or "us") is committed to protecting user privacy and maintaining complete transparency regarding data access. This Privacy Policy explains how Gantt Flow accesses, processes, stores, and safeguards your information.</p>
+
+    <!-- 1. What information is collected -->
+    <h2>1. Information That Is Collected</h2>
+    <p>Gantt Flow collects and processes only the minimum necessary information required for account sign-in and schedule management:</p>
+    <ul>
+      <li><strong>Basic Profile Information:</strong> User ID, Display Name, Email Address, and Profile Picture URL provided directly by Google Authentication during sign-in.</li>
+      <li><strong>Calendar & Event Metadata:</strong> Calendar names, IDs, event titles, start/end dates and times, event descriptions, location, attendee email lists, and attachment references.</li>
+      <li><strong>Google Drive File References:</strong> File IDs, file names, icon links, and web view URLs for Google Drive files you explicitly select to attach to calendar events.</li>
+    </ul>
+
+    <!-- 2. What Google APIs are used -->
+    <h2>2. Google APIs Used</h2>
+    <p>Gantt Flow integrates with the following official Google APIs:</p>
+    <ul>
+      <li><strong>Google Sign-In & Firebase Auth:</strong> For secure user authentication.</li>
+      <li><strong>Google Calendar API V3:</strong> Requested minimum scopes: <code>https://www.googleapis.com/auth/calendar.events</code> &amp; <code>https://www.googleapis.com/auth/calendar.readonly</code></li>
+      <li><strong>Google Drive API V3 (Read-Only):</strong> Requested scope: <code>https://www.googleapis.com/auth/drive.readonly</code></li>
+    </ul>
+
+    <!-- 3. Why Calendar access is needed -->
+    <h2>3. Why Google Calendar Access Is Needed</h2>
+    <p>Access to Google Calendar APIs (<code>https://www.googleapis.com/auth/calendar.events</code> &amp; <code>https://www.googleapis.com/auth/calendar.readonly</code>) is strictly required to:</p>
+    <ul>
+      <li>Read your existing Google Calendars and events to build the horizontal timeline bars on the Gantt chart display.</li>
+      <li>Allow you to create new events, modify start/end timing or event details, and delete events directly within Gantt Flow, keeping your Google Calendar synchronized in real time.</li>
+    </ul>
+
+    <!-- 4. Why Drive access is needed -->
+    <h2>4. Why Google Drive Access Is Needed</h2>
+    <p>Access to the Google Drive API (<code>https://www.googleapis.com/auth/drive.readonly</code>) is strictly required to:</p>
+    <ul>
+      <li>Display a list of your existing Google Drive files in a file selector picker when you choose to attach document or image reference links to specific calendar events.</li>
+      <li>Gantt Flow uses read-only access and cannot create, modify, or delete any files in your Google Drive.</li>
+    </ul>
+
+    <!-- 5. Whether data is stored -->
+    <h2>5. Data Storage & Retention Policy</h2>
+    <p><strong>Is your personal calendar or file data stored on remote servers? No.</strong></p>
+    <ul>
+      <li>Gantt Flow operates entirely client-side. Your calendar events, Drive files, and profile data are processed locally on your device and are never sent to external servers or third-party databases.</li>
+      <li>OAuth authentication access tokens and user display settings are securely cached on your local device using encrypted native storage (SharedPreferences / Keychains).</li>
+    </ul>
+
+    <!-- 6. Data deletion policy -->
+    <h2>6. Data Deletion Policy & User Rights</h2>
+    <p>You retain full control over your data and access permissions:</p>
+    <ul>
+      <li><strong>Local Data Removal:</strong> Tapping "Sign Out" inside the Gantt Flow application immediately purges all cached authentication tokens and local user data from your device.</li>
+      <li><strong>Revoking Access:</strong> You can permanently revoke Gantt Flow's access to your Google account at any time by visiting <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener">Google Account Permission Settings</a>.</li>
+      <li><strong>Account Deletion:</strong> Because Gantt Flow does not store your data on external databases, revoking permissions and signing out completes full data deletion.</li>
+    </ul>
+
+    <!-- Google Limited Use Compliance -->
+    <h2>7. Compliance with Google API Services User Data Policy</h2>
+    <p>Gantt Flow's use and transfer to any other app of information received from Google APIs will adhere to the <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener">Google API Services User Data Policy</a>, including the Limited Use requirements.</p>
+
+    <!-- 7. Contact information -->
+    <h2>8. Contact Information</h2>
+    <p>If you have any questions or concerns regarding this Privacy Policy or your data, please contact the developer:</p>
+    <p style="font-size: 1.1rem; color: #64B5F6;"><strong>Developer Email:</strong> <a href="mailto:rojan.shr1996@gmail.com">rojan.shr1996@gmail.com</a></p>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <img src="ganttLogoTrans.png" alt="Gantt Flow Logo" style="height: 32px;">
+        <span style="font-weight: 700; font-size: 1.1rem; color: var(--text-main);">Gantt Flow</span>
+      </div>
+      <p class="copyright">© 2026 Gantt Flow. All rights reserved.</p>
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms of Service</a></li>
+      </ul>
+    </div>
+  </footer>
+
+</body>
+</html>

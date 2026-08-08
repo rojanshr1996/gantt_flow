@@ -35,9 +35,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => AuthServiceProvider()),
         ChangeNotifierProvider(create: (context) => CalendarServiceProvider()),
         ChangeNotifierProvider(create: (context) => EventServiceProvider()),
-        ChangeNotifierProvider(
-            create: (context) =>
-                AppUpdateProvider(remoteConfigService, appPackageInfo)),
+        ChangeNotifierProvider(create: (context) => AppUpdateProvider(remoteConfigService, appPackageInfo)),
       ],
       child: MaterialApp(
         title: 'Gantt Flow',
